@@ -1,8 +1,8 @@
-img {
-    -moz-transform: scaleY(-1);
-    -o-transform: scaleY(-1);
-    -webkit-transform: scaleY(-1);
-    transform: scaleY(-1);
-    filter: FlipV;
-    -ms-filter: "FlipV";
+img, svg, div[role="img"] {
+    -moz-transform: scaleY(-1) !important;
+    -o-transform: scaleY(-1) !important;
+    -webkit-transform: scaleY(-1) !important;
+    transform: scaleY(-1) !important;
+    filter: FlipV !important;
+    -ms-filter: "FlipV" !important;
 }
