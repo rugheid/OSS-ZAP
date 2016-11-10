@@ -53,8 +53,7 @@ public class FilterImages extends FilterAdaptor {
 
     @Override
     public String getName() {
-        // TODO: Change this name
-        return Constant.messages.getString("filter.setcookie.name");
+        return Constant.messages.getString("filter.images.name");
     }
 
     @Override
@@ -94,6 +93,7 @@ public class FilterImages extends FilterAdaptor {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
+
     }
 }
 
