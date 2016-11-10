@@ -80,7 +80,7 @@ public class FilterImages extends FilterAdaptor {
 
     private ImageFilterAction loadActionWithName(String name) {
         try {
-            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions" + name);
+            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions." + name);
             return (ImageFilterAction) clazz.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
