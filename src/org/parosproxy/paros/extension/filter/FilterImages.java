@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.extension.filter.imageFilterActions.ImageFilterAction;
 import org.parosproxy.paros.model.Model;
@@ -74,7 +75,8 @@ public class FilterImages extends FilterAdaptor {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+        	Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
+            this.imageFilterActions.clear();
         }
     }
 
@@ -82,8 +84,8 @@ public class FilterImages extends FilterAdaptor {
         try {
             Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions." + name);
             return (ImageFilterAction) clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        	Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
             return null;
         }
     }
@@ -93,11 +95,9 @@ public class FilterImages extends FilterAdaptor {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-        for (ImageFilterAction action: this.imageFilterActions) {
-            if (action.isEnabled()) {
-                action.onHttpResponseReceive(msg);
-            }
-        }
+        for (ImageFilterAction action : this.imageFilterActions)
+        	if (action.isEnabled())
+        		action.onHttpResponseReceive(msg);
     }
 }
 
