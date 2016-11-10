@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.extension.filter.imageFilterActions.ImageFilterAction;
 import org.parosproxy.paros.model.Model;
@@ -74,17 +75,17 @@ public class FilterImages extends FilterAdaptor {
                 }
             }
         } catch (IOException e) {
-            // TODO: log failure?
+        	Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
             this.imageFilterActions.clear();
         }
     }
 
     private ImageFilterAction loadActionWithName(String name) {
         try {
-            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions" + name);
+            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions." + name);
             return (ImageFilterAction) clazz.newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            // TODO log failure?
+        	Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
             return null;
         }
     }
@@ -94,9 +95,9 @@ public class FilterImages extends FilterAdaptor {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-        this.imageFilterActions.stream()
-            .filter(action -> action.isEnabled())
-            .forEachOrdered(action -> action.onHttpResponseReceive(msg));
+        for (ImageFilterAction action : this.imageFilterActions)
+        	if (action.isEnabled())
+        		action.onHttpResponseReceive(msg);
     }
 }
 
