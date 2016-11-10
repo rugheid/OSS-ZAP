@@ -93,7 +93,11 @@ public class FilterImages extends FilterAdaptor {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-
+        for (ImageFilterAction action: this.imageFilterActions) {
+            if (action.isEnabled()) {
+                action.onHttpResponseReceive(msg);
+            }
+        }
     }
 }
 
