@@ -1,8 +1,0 @@
-img, svg, figure, div[role="img"], div[id="hplogo"] {
-    -moz-transform: scaleY(-1) !important;
-    -o-transform: scaleY(-1) !important;
-    -webkit-transform: scaleY(-1) !important;
-    transform: scaleY(-1) !important;
-    filter: FlipV !important;
-    -ms-filter: "FlipV" !important;
-}
