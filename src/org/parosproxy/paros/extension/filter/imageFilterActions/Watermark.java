@@ -12,7 +12,7 @@ public class Watermark extends ImageFilterAction {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-        if (!msg.getResponseHeader().isImage()) return;
+        if (msg.getResponseHeader().isEmpty() || !msg.getResponseHeader().isImage()) return;
 
         try {
             BufferedImage image = imageFromBytes(msg.getResponseBody().getBytes());
