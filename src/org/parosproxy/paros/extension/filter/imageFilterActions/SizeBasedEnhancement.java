@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
+
 import org.parosproxy.paros.network.HttpMessage;
+import org.parosproxy.paros.network.HttpResponseHeader;
 
 public class SizeBasedEnhancement extends ImageFilterAction {
 
@@ -46,7 +48,6 @@ public class SizeBasedEnhancement extends ImageFilterAction {
             byte[] byteImage = msg.getResponseBody().getBytes();
             InputStream in = new ByteArrayInputStream(byteImage);
             BufferedImage bufferedImage = ImageIO.read(in);
-            
             if (bufferedImage == null) return;
             BufferedImage resultImage = SizeBasedEnhancement.toGrayscale(bufferedImage);            
            
@@ -56,6 +57,7 @@ public class SizeBasedEnhancement extends ImageFilterAction {
             byte[] resultBytes = baos.toByteArray();
 			baos.close();
 	        msg.setResponseBody(resultBytes);
+	        msg.getResponseHeader().setContentLength(resultBytes.length);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
