@@ -43,6 +43,7 @@ public class SizeBasedEnhancement extends ImageFilterAction {
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
         if (!msg.getResponseHeader().isImage()) return;
+        if (msg.getResponseBody().length() < 100 * 1024) return;
 
         try {
             byte[] byteImage = msg.getResponseBody().getBytes();
