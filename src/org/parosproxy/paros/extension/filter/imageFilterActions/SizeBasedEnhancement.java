@@ -8,6 +8,8 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
+import org.parosproxy.paros.extension.filter.FilterImages;
 import org.parosproxy.paros.network.HttpMessage;
 import org.parosproxy.paros.network.HttpResponseHeader;
 
@@ -42,8 +44,8 @@ public class SizeBasedEnhancement extends ImageFilterAction {
 	
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-        if (!msg.getResponseHeader().isImage()) return;
-        if (msg.getResponseBody().length() < 100 * 1024) return;
+        if (msg.getResponseHeader().isEmpty() || !msg.getResponseHeader().isImage() || msg.getResponseBody().length() < 100 * 1024)
+			return;
 
         try {
             byte[] byteImage = msg.getResponseBody().getBytes();
@@ -60,7 +62,7 @@ public class SizeBasedEnhancement extends ImageFilterAction {
 	        msg.setResponseBody(resultBytes);
 	        msg.getResponseHeader().setContentLength(resultBytes.length);
 		} catch (IOException e) {
-			e.printStackTrace();
+        	Logger.getLogger(SizeBasedEnhancement.class).error(e.getMessage(), e);
 		}
     }
 }
