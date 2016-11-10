@@ -28,7 +28,11 @@
 
 package org.parosproxy.paros.extension.filter;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.extension.filter.imageFilterActions.ImageFilterAction;
@@ -57,7 +61,32 @@ public class FilterImages extends FilterAdaptor {
     public void init(Model model) {
         super.init(model);
 
+        this.imageFilterActions = new ArrayList<>();
+        try {
+            Properties properties = new Properties();
+            properties.load(getClass().getResourceAsStream("/resource/oss/FilterImages.properties"));
+            Enumeration<?> actions = properties.propertyNames();
+            while (actions.hasMoreElements()) {
+                String actionName = (String) actions.nextElement();
+                ImageFilterAction action = loadActionWithName(actionName);
+                if (action != null) {
+                    action.setEnabled(properties.getProperty(actionName).equals("enabled"));
+                    imageFilterActions.add(action);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private ImageFilterAction loadActionWithName(String name) {
+        try {
+            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions" + name);
+            return (ImageFilterAction) clazz.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
