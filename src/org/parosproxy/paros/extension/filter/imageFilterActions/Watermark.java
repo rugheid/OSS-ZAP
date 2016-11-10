@@ -20,7 +20,9 @@ public class Watermark extends ImageFilterAction {
             URL watermarkFile = getClass().getResource("/resource/oss/trump-head.png");
             addImageWatermark(watermarkFile, image);
 
-            msg.setResponseBody(bytesFromImage(image));
+            byte[] bytes = bytesFromImage(image);
+            msg.setResponseBody(bytes);
+            msg.getResponseHeader().setContentLength(bytes.length);
         } catch (IOException e) {
             e.printStackTrace();
         }
