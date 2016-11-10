@@ -74,16 +74,17 @@ public class FilterImages extends FilterAdaptor {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO: log failure?
+            this.imageFilterActions.clear();
         }
     }
 
     private ImageFilterAction loadActionWithName(String name) {
         try {
-            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions." + name);
+            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions" + name);
             return (ImageFilterAction) clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            // TODO log failure?
             return null;
         }
     }
@@ -93,11 +94,9 @@ public class FilterImages extends FilterAdaptor {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-        for (ImageFilterAction action: this.imageFilterActions) {
-            if (action.isEnabled()) {
-                action.onHttpResponseReceive(msg);
-            }
-        }
+        this.imageFilterActions.stream()
+            .filter(action -> action.isEnabled())
+            .forEachOrdered(action -> action.onHttpResponseReceive(msg));
     }
 }
 
