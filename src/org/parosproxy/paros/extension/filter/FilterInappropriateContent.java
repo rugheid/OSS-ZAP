@@ -2,7 +2,7 @@ package org.parosproxy.paros.extension.filter;
 
 import org.parosproxy.paros.network.HttpMessage;
 
-public class FilterContent extends FilterAdaptor {
+public class FilterInappropriateContent extends FilterAdaptor {
 
 
     @Override

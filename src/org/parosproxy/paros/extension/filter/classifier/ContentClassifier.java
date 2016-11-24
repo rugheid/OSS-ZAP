@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ContentClassifier {
 
-     Classification classify(HttpMessage message);
+    Classification classify(HttpMessage message);
 
     class Classification {
         final int score;
