@@ -1,14 +1,19 @@
 package org.parosproxy.paros.extension.filter;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.extension.filter.classifier.ContentClassifier;
 import org.parosproxy.paros.extension.filter.classifier.ContentClassifier.Classification;
 import org.parosproxy.paros.extension.filter.classifier.InappropriateTermClassifier;
 import org.parosproxy.paros.network.HttpMessage;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class FilterInappropriateContent extends FilterAdaptor {
 
-    ContentClassifier classifier = new InappropriateTermClassifier();
+    private ContentClassifier classifier = new InappropriateTermClassifier();
 
     @Override
     public int getId() {
@@ -30,8 +35,15 @@ public class FilterInappropriateContent extends FilterAdaptor {
         Classification classification = classifier.classify(httpMessage);
 
         if (classification.classified) {
-            // TODO: Return automatic page here with reasons
-            httpMessage.getResponseBody().setBody("<h1>Blocked!</h1>");
+            String blockedPageHTML = null;
+            try {
+                blockedPageHTML = IOUtils.toString(getClass().getResourceAsStream("/resource/oss/blocked.html"));
+            } catch (IOException e) {
+                System.out.println("Loading blocked HTML page failed! Using simple string instead.");
+                blockedPageHTML = "<h1>Blocked</h1>";
+            }
+            blockedPageHTML = blockedPageHTML.replace("<reasons>", StringUtils.join(classification.reasons, ", "));
+            httpMessage.setResponseBody(blockedPageHTML);
         }
     }
 }
