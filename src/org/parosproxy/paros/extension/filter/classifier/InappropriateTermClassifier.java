@@ -3,7 +3,9 @@ package org.parosproxy.paros.extension.filter.classifier;
 import org.parosproxy.paros.network.HttpMessage;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import org.parosproxy.paros.extension.filter.classifier.InapproprateTermParser.Term;
 
 public class InappropriateTermClassifier implements ContentClassifier {
 
@@ -14,9 +16,14 @@ public class InappropriateTermClassifier implements ContentClassifier {
 
     @Override
     public Classification classify(HttpMessage message) {
-        // TODO: Implement this
-        Set<String> reasons = new HashSet<>();
-        reasons.add("You shall not pass! ~Gandalf");
-        return new Classification(true, reasons);
+
+        // TODO: Parse here correctly
+        List<Term> terms = new CSVParser().parseFile(null);
+
+        for (Term term: terms) {
+            // TODO: Count occurrences here
+        }
+
+        return new Classification(true, new HashSet<>());
     }
 }
