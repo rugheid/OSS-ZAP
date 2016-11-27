@@ -2,10 +2,11 @@ package org.parosproxy.paros.extension.filter.classifier;
 
 import org.parosproxy.paros.network.HttpMessage;
 
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import org.parosproxy.paros.extension.filter.classifier.InapproprateTermParser.Term;
+
+import org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.Term;
 
 public class InappropriateTermClassifier implements ContentClassifier {
 
@@ -17,8 +18,11 @@ public class InappropriateTermClassifier implements ContentClassifier {
     @Override
     public Classification classify(HttpMessage message) {
 
-        // TODO: Parse here correctly
-        List<Term> terms = new CSVParser().parseFile(null);
+        String fileName = "file_name_here", extension = "csv";
+
+        InappropriateTermParser parser = InappropriateTermParserFactory.getSharedInstance().getParserForExtension(extension);
+        InputStream file = getClass().getResourceAsStream(fileName + "." + extension);
+        List<Term> terms = parser.parseFile(file);
 
         for (Term term: terms) {
             // TODO: Count occurrences here

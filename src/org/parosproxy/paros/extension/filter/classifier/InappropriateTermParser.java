@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
-public interface InapproprateTermParser {
+public interface InappropriateTermParser {
 
     List<Term> parseFile(InputStream input);
 
