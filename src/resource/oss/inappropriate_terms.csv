@@ -1,0 +1,9 @@
+# FORMAT: threshold #VALUE#
+
+threshold 10
+
+# FORMAT: #inappropriate string#;#weight#;#TAGS SEPARATED BY COMMA#
+trump;4;fearmongering,mysogenist,bigotry
+nigger;10;racist
+deport mexicans;10;racist,fearmongering
+dick;2;sexual

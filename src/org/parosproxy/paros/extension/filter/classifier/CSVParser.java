@@ -5,13 +5,8 @@ import java.util.List;
 
 public class CSVParser implements InappropriateTermParser {
 
-    static {
-        CSVParser parser = new CSVParser();
-        InappropriateTermParserFactory.getSharedInstance().registerParserForExtension(parser, "csv");
-    }
-
     @Override
-    public List<Term> parseFile(InputStream input) {
+    public List<Term> parseFileWithName(String fileName) {
         // TODO: Implement this
         return null;
     }

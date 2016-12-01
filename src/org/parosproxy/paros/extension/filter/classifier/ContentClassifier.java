@@ -11,11 +11,11 @@ public interface ContentClassifier {
     Classification classify(HttpMessage message);
 
     class Classification {
-        public final boolean classified;
+        public final boolean classifiedInappropriate;
         public final Set<String> reasons;
 
-        Classification(boolean classified, Set<String> reasons) {
-            this.classified = classified;
+        Classification(boolean classifiedInappropriate, Set<String> reasons) {
+            this.classifiedInappropriate = classifiedInappropriate;
             this.reasons = reasons;
         }
     }

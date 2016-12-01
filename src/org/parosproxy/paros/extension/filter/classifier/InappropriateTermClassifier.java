@@ -18,16 +18,27 @@ public class InappropriateTermClassifier implements ContentClassifier {
     @Override
     public Classification classify(HttpMessage message) {
 
-        String fileName = "file_name_here", extension = "csv";
-
-        InappropriateTermParser parser = InappropriateTermParserFactory.getSharedInstance().getParserForExtension(extension);
-        InputStream file = getClass().getResourceAsStream(fileName + "." + extension);
-        List<Term> terms = parser.parseFile(file);
-
+        List<Term> terms = readInappropriateTermsFromFile();
         for (Term term: terms) {
             // TODO: Count occurrences here
         }
 
         return new Classification(true, new HashSet<>());
+    }
+
+
+    // INAPPROPRIATE TERM PARSING
+
+    // TODO: Move this to a configuration file?
+    private final String fileName = "inappropriate_terms", extension = "csv";
+
+    private List<Term> inappropriateTerms;
+
+    private List<Term> readInappropriateTermsFromFile() {
+        if (inappropriateTerms == null) {
+            InappropriateTermParser parser = new CSVParser();
+            inappropriateTerms = parser.parseFileWithName(fileName + "." + extension);
+        }
+        return inappropriateTerms;
     }
 }
