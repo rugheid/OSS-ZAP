@@ -3,10 +3,6 @@ package org.parosproxy.paros.extension.filter.classifier;
 import org.apache.commons.lang.StringUtils;
 import org.parosproxy.paros.network.HttpMessage;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.Term;
 import org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.InappropriateTermFileContent;
 
@@ -44,7 +40,7 @@ public class InappropriateTermClassifier implements ContentClassifier {
     private InappropriateTermFileContent readInappropriateTermsFromFile() {
         if (fileContent == null) {
             InappropriateTermParser parser = new CSVParser();
-            fileContent = parser.parseFileWithName(fileName + "." + extension);
+            fileContent = parser.parseFileWithName("/resource/oss/" + fileName + "." + extension);
         }
         return fileContent;
     }
