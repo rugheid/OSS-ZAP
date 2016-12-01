@@ -3,11 +3,24 @@ package org.parosproxy.paros.extension.filter.imageFilterActions;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.network.HttpMessage;
 
 public class SizeBasedEnhancement extends ImageFilterAction {
+
+    private int allowedSize;
+
+    {
+        try {
+            Properties properties = new Properties();
+            properties.load(getClass().getResourceAsStream("/resource/oss/MagicNumbers.properties"));
+            this.allowedSize = Integer.parseInt(properties.getProperty("SizeBasedEnhancement"));
+        } catch (IOException e) {
+            Logger.getLogger(SizeBasedEnhancement.class).error(e.getMessage(), e);
+        }
+    }
 
     private static BufferedImage toGrayscale(BufferedImage img) {
         // get image width and height
@@ -36,7 +49,8 @@ public class SizeBasedEnhancement extends ImageFilterAction {
 
     @Override
     public void onHttpResponseReceive(HttpMessage msg) {
-        if (msg.getResponseHeader().isEmpty() || !msg.getResponseHeader().isImage() || msg.getResponseBody().length() < 100 * 1024)
+        if (msg.getResponseHeader().isEmpty() || !msg.getResponseHeader().isImage() ||
+                msg.getResponseBody().length() < this.allowedSize * 1024)
             return;
 
         try {
@@ -49,4 +63,5 @@ public class SizeBasedEnhancement extends ImageFilterAction {
             Logger.getLogger(SizeBasedEnhancement.class).error(e.getMessage(), e);
         }
     }
+
 }
