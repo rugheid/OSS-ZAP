@@ -16,8 +16,9 @@ public class InappropriateTermClassifier implements ContentClassifier {
     @Override
     public Classification classify(HttpMessage message) {
         InappropriateTermFileContent fileContent = readInappropriateTermsFromFile();
-        int score = 0;
         Classification classification = new Classification();
+        if (fileContent == null) return classification;
+        int score = 0;
         for (Term term: fileContent.terms) {
             int occurrences = StringUtils.countMatches(message.getResponseBody().toString(), term.term);
             if (occurrences > 0) {
