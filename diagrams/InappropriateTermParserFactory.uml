@@ -3,29 +3,58 @@
   <ID>JAVA</ID>
   <OriginalElement>org.parosproxy.paros.extension.filter.classifier.InappropriateTermParserFactory</OriginalElement>
   <nodes>
-    <node x="119.0" y="0.0">org.parosproxy.paros.extension.filter.classifier.InappropriateTermParserFactory</node>
-    <node x="0.0" y="22.0">org.parosproxy.paros.extension.filter.classifier.CSVParser</node>
-    <node x="83.75" y="124.0">org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser</node>
+    <node x="-367.0" y="37.0">org.parosproxy.paros.extension.filter.classifier.ContentClassifier</node>
+    <node x="-394.5" y="241.0">org.parosproxy.paros.extension.filter.classifier.InappropriateTermClassifier</node>
+    <node x="-406.0" y="354.0">org.parosproxy.paros.extension.filter.classifier.InappropriateTermParserFactory</node>
+    <node x="47.0" y="343.0">org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.Term</node>
+    <node x="-60.0" y="376.0">org.parosproxy.paros.extension.filter.classifier.CSVParser</node>
+    <node x="-437.0" y="117.0">org.parosproxy.paros.extension.filter.classifier.ContentClassifier.Classification</node>
+    <node x="-98.5" y="263.0">org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser</node>
   </nodes>
   <notes />
   <edges>
     <edge source="org.parosproxy.paros.extension.filter.classifier.CSVParser" target="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser">
-      <point x="-46.5" y="-15.0" />
-      <point x="130.25" y="99.0" />
-      <point x="49.5" y="99.0" />
+      <point x="0.0" y="-15.0" />
       <point x="0.0" y="15.0" />
     </edge>
-    <edge source="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParserFactory" target="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser">
-      <point x="46.5" y="-15.0" />
-      <point x="223.25" y="99.0" />
-      <point x="304.0" y="99.0" />
+    <edge source="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.Term" target="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser">
+      <point x="0.0" y="-48.0" />
+      <point x="124.0" y="318.0" />
+      <point x="38.16666666666663" y="318.0" />
+      <point x="54.66666666666666" y="15.0" />
+    </edge>
+    <edge source="org.parosproxy.paros.extension.filter.classifier.InappropriateTermClassifier" target="org.parosproxy.paros.extension.filter.classifier.ContentClassifier.Classification">
+      <point x="-44.75" y="-15.0" />
+      <point x="-349.75" y="216.0" />
+      <point x="-352.5" y="216.0" />
       <point x="0.0" y="37.0" />
     </edge>
+    <edge source="org.parosproxy.paros.extension.filter.classifier.InappropriateTermClassifier" target="org.parosproxy.paros.extension.filter.classifier.ContentClassifier">
+      <point x="44.75" y="-15.0" />
+      <point x="-260.25" y="216.0" />
+      <point x="-257.5" y="216.0" />
+      <point x="-257.5" y="92.0" />
+      <point x="-274.0" y="92.0" />
+      <point x="31.0" y="15.0" />
+    </edge>
+    <edge source="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParserFactory" target="org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser">
+      <point x="0.0" y="-37.0" />
+      <point x="-243.0" y="318.0" />
+      <point x="-71.16666666666669" y="318.0" />
+      <point x="-54.666666666666664" y="15.0" />
+    </edge>
+    <edge source="org.parosproxy.paros.extension.filter.classifier.ContentClassifier.Classification" target="org.parosproxy.paros.extension.filter.classifier.ContentClassifier">
+      <point x="0.0" y="-37.0" />
+      <point x="-352.5" y="92.0" />
+      <point x="-336.0" y="92.0" />
+      <point x="-31.0" y="15.0" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="1.0" x="248.5" y="55.0" />
+  <settings layout="Hierarchic Group" zoom="1.0" x="74.0" y="289.5" />
   <SelectedNodes />
   <Categories>
     <Category>Fields</Category>
+    <Category>Inner Classes</Category>
   </Categories>
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>
