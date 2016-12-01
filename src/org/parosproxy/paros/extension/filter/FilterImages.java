@@ -46,7 +46,6 @@ public class FilterImages extends FilterAdaptor {
 
     private List<ImageFilterAction> imageFilterActions;
 
-
     @Override
     public int getId() {
         return 306;
@@ -68,7 +67,7 @@ public class FilterImages extends FilterAdaptor {
             Enumeration<?> actions = properties.propertyNames();
             while (actions.hasMoreElements()) {
                 String actionName = (String) actions.nextElement();
-                ImageFilterAction action = loadActionWithName(actionName);
+                ImageFilterAction action = ImageFilterAction.loadActionWithName(actionName);
                 if (action != null) {
                     action.setEnabled(properties.getProperty(actionName).equals("enabled"));
                     imageFilterActions.add(action);
@@ -77,16 +76,6 @@ public class FilterImages extends FilterAdaptor {
         } catch (IOException e) {
         	Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
             this.imageFilterActions.clear();
-        }
-    }
-
-    private ImageFilterAction loadActionWithName(String name) {
-        try {
-            Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions." + name);
-            return (ImageFilterAction) clazz.newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-        	Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
-            return null;
         }
     }
 
