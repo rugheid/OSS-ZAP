@@ -3,7 +3,12 @@
 threshold 10
 
 # FORMAT: #inappropriate string#;#weight#;#TAGS SEPARATED BY COMMA#
-trump;4;fearmongering,mysogenist,bigotry
+trump;-4;fearmongering,mysogenist,bigotry,Make America great again!
 nigger;10;racist
-deport mexicans;10;racist,fearmongering
+deport mexicans;-1000;racist,fearmongering
 dick;2;sexual
+<script>;5;hacking
+<?php;1000;irresponsible programming
+Philip Dutré;1000;fearmongering
+Ronald Cools;1000;fearmongering
+GRASP patterns;-1000;following design guidelines
