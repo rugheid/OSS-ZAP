@@ -33,7 +33,6 @@ public class InappropriateTermClassifier implements ContentClassifier {
 
     // INAPPROPRIATE TERM PARSING
 
-    // TODO: Move this to a configuration file?
     private final String fileName = "inappropriate_terms", extension = "csv";
 
     private InappropriateTermFileContent fileContent;

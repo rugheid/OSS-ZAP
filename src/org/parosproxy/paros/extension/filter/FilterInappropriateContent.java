@@ -34,7 +34,6 @@ public class FilterInappropriateContent extends FilterAdaptor {
         Classification classification = classifier.classify(httpMessage);
 
         if (classification.classifiedInappropriate) {
-            // TODO: Improve Blocked page
             String blockedPageHTML = null;
             try {
                 blockedPageHTML = IOUtils.toString(getClass().getResourceAsStream("/resource/oss/blocked.html"));
