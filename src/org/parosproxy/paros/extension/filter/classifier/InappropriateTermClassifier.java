@@ -1,12 +1,14 @@
 package org.parosproxy.paros.extension.filter.classifier;
 
+import org.apache.commons.lang.StringUtils;
 import org.parosproxy.paros.network.HttpMessage;
 
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.Term;
+import org.parosproxy.paros.extension.filter.classifier.InappropriateTermParser.InappropriateTermFileContent;
 
 public class InappropriateTermClassifier implements ContentClassifier {
 
@@ -17,13 +19,18 @@ public class InappropriateTermClassifier implements ContentClassifier {
 
     @Override
     public Classification classify(HttpMessage message) {
-
-        List<Term> terms = readInappropriateTermsFromFile();
-        for (Term term: terms) {
-            // TODO: Count occurrences here
+        InappropriateTermFileContent fileContent = readInappropriateTermsFromFile();
+        int score = 0;
+        Classification classification = new Classification();
+        for (Term term: fileContent.terms) {
+            int occurrences = StringUtils.countMatches(message.getResponseBody().toString(), term.term);
+            if (occurrences > 0) {
+                classification.reasons.addAll(term.reasons);
+                score += term.score;
+            }
         }
-
-        return new Classification(true, new HashSet<>());
+        classification.classifiedInappropriate = score > fileContent.threshold;
+        return classification;
     }
 
 
@@ -32,13 +39,13 @@ public class InappropriateTermClassifier implements ContentClassifier {
     // TODO: Move this to a configuration file?
     private final String fileName = "inappropriate_terms", extension = "csv";
 
-    private List<Term> inappropriateTerms;
+    private InappropriateTermFileContent fileContent;
 
-    private List<Term> readInappropriateTermsFromFile() {
-        if (inappropriateTerms == null) {
+    private InappropriateTermFileContent readInappropriateTermsFromFile() {
+        if (fileContent == null) {
             InappropriateTermParser parser = new CSVParser();
-            inappropriateTerms = parser.parseFileWithName(fileName + "." + extension);
+            fileContent = parser.parseFileWithName(fileName + "." + extension);
         }
-        return inappropriateTerms;
+        return fileContent;
     }
 }

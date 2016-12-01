@@ -6,7 +6,17 @@ import java.util.Set;
 
 public interface InappropriateTermParser {
 
-    List<Term> parseFileWithName(String fileName);
+    InappropriateTermFileContent parseFileWithName(String fileName);
+
+    class InappropriateTermFileContent {
+        public final int threshold;
+        public final List<Term> terms;
+
+        public InappropriateTermFileContent(int threshold, List<Term> terms) {
+            this.threshold = threshold;
+            this.terms = terms;
+        }
+    }
 
     class Term {
         public final String term;
