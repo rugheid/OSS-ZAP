@@ -9,7 +9,6 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
-import org.parosproxy.paros.extension.filter.FilterImages;
 import org.parosproxy.paros.network.HttpMessage;
 
 public abstract class ImageFilterAction {
@@ -31,7 +30,7 @@ public abstract class ImageFilterAction {
             Class<?> clazz = Class.forName("org.parosproxy.paros.extension.filter.imageFilterActions." + name);
             return (ImageFilterAction) clazz.newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            Logger.getLogger(FilterImages.class).error(e.getMessage(), e);
+            Logger.getLogger(ImageFilterAction.class).error(e.getMessage(), e);
             return null;
         }
     }
