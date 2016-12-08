@@ -144,4 +144,10 @@ public class ContentReportScanner extends PluginPassiveScanner {
     public String getReference() {
     	return "How can you stop him, when he's already here."; //TODO
     }
+
+    @Override
+	public boolean appliesToHistoryType (int historyType) {
+		// TODO: base on HistoryReference (6: HIDDEN)
+		return true;
+	};
 }
