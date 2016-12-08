@@ -27,8 +27,8 @@ import java.util.List;
 public class ExtensionHookLoader {
 
     final Map<Extension, ExtensionHook> extensionHooks = new HashMap<Extension, ExtensionHook>();
-    private Model model = null;
-    private View view = null;
+    private final Model model;
+    private final View view;
 
     private static final Logger logger = Logger.getLogger(ExtensionHookLoader.class);
 
