@@ -35,7 +35,7 @@ import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.control.Control;
 import org.parosproxy.paros.extension.ExtensionAdaptor;
 import org.parosproxy.paros.extension.ExtensionHook;
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.extension.history.ExtensionHistory;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.view.View;
@@ -93,10 +93,10 @@ public class ExtensionStdMenus extends ExtensionAdaptor implements ClipboardOwne
 	        extensionHook.getHookMenu().addPopupMenuItem(getPopupMenuCopy());
             extensionHook.getHookMenu().addPopupMenuItem(getPopupMenuPaste());
 
-			final ExtensionLoader extensionLoader = Control.getSingleton().getExtensionLoader();
-			boolean isExtensionHistoryEnabled = extensionLoader.isExtensionEnabled(ExtensionHistory.NAME);
-			boolean isExtensionActiveScanEnabled = extensionLoader.isExtensionEnabled(ExtensionActiveScan.NAME);
-			boolean isExtensionSpiderEnabled = extensionLoader.isExtensionEnabled(ExtensionSpider.NAME);
+			final ExtensionManager extensionManager = Control.getSingleton().getExtensionLoader();
+			boolean isExtensionHistoryEnabled = extensionManager.isExtensionEnabled(ExtensionHistory.NAME);
+			boolean isExtensionActiveScanEnabled = extensionManager.isExtensionEnabled(ExtensionActiveScan.NAME);
+			boolean isExtensionSpiderEnabled = extensionManager.isExtensionEnabled(ExtensionSpider.NAME);
 			// Be careful when changing the menu indexes (and order above) - its easy to get unexpected
 			// results!
 			extensionHook.getHookMenu().addPopupMenuItem(getPopupExcludeFromProxyMenu(0));

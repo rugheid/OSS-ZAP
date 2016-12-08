@@ -51,7 +51,7 @@ import org.parosproxy.paros.control.Control;
 import org.parosproxy.paros.control.Control.Mode;
 import org.parosproxy.paros.extension.ExtensionAdaptor;
 import org.parosproxy.paros.extension.ExtensionHook;
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.extension.SessionChangedListener;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.extension.manualrequest.http.impl.ManualHttpRequestEditorDialog;
@@ -107,7 +107,7 @@ public class ExtensionManualRequestEditor extends ExtensionAdaptor implements Se
 
 			if (getView() != null) {
 				// unload menu items
-				ExtensionLoader extLoader = Control.getSingleton().getExtensionLoader();
+				ExtensionManager extLoader = Control.getSingleton().getExtensionLoader();
 				extLoader.removeToolsMenuItem(dialogue.getMenuItem());
 			}
 		}

@@ -24,7 +24,7 @@
 // ZAP: 2012/06/11 Changed to call the method Control.shutdown(boolean) with the
 // parameter set as true.
 // ZAP: 2012/06/19 Changed the method sessionOpened(File,Exception) to not call
-// the method ExtensionLoader.sessionChangedAllPlugin, now it's done in the
+// the method ExtensionManager.sessionChangedAllPlugin, now it's done in the
 // class Control.
 // ZAP: 2012/07/02 Changed to use the new database compact option in the method
 // exit().
@@ -499,7 +499,7 @@ public class MenuFileControl implements SessionListener {
     public void sessionOpened(File file, Exception e) {
         if (e == null) {
             // ZAP: Removed the statement that called the method
-            // ExtensionLoader.sessionChangedAllPlugin, now it's done in the
+            // ExtensionManager.sessionChangedAllPlugin, now it's done in the
             // class Control.
 
             // ZAP: Set the title consistently

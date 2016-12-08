@@ -282,7 +282,7 @@ public abstract class ExtensionAdaptor implements Extension {
     @Override
 	public void unload() {
 		Control control = Control.getSingleton();
-		ExtensionLoader extLoader = control.getExtensionLoader();
+		ExtensionManager extLoader = control.getExtensionLoader();
 
 		extLoader.removeExtension(this, hook);
 	}

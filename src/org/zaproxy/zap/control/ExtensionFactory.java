@@ -41,7 +41,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.extension.Extension;
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.model.OptionsParam;
 import org.zaproxy.zap.extension.help.ExtensionHelp;
@@ -86,7 +86,7 @@ public class ExtensionFactory {
         return addOnLoader;
     }
 
-    public static synchronized void loadAllExtension(ExtensionLoader extensionLoader, OptionsParam optionsParam) {
+    public static synchronized void loadAllExtension(ExtensionManager extensionManager, OptionsParam optionsParam) {
         log.info("Loading extensions");
         List<Extension> listExts = new ArrayList<>(CoreFunctionality.getBuiltInExtensions());
     	
@@ -142,7 +142,7 @@ public class ExtensionFactory {
                 if (ext.isEnabled()) {
                     log.debug("Ordered extension " + order + " " + ext.getName());
                 }
-                loadMessagesAndAddExtension(extensionLoader, ext);
+                loadMessagesAndAddExtension(extensionManager, ext);
             }
             
             // And then the unordered ones
@@ -150,7 +150,7 @@ public class ExtensionFactory {
                 if (ext.isEnabled()) {
                     log.debug("Unordered extension " + ext.getName());
                 }
-                loadMessagesAndAddExtension(extensionLoader, ext);
+                loadMessagesAndAddExtension(extensionManager, ext);
             }
         }
         
@@ -159,19 +159,19 @@ public class ExtensionFactory {
 
     /**
      * Loads the messages of the {@code extension} and, if enabled, adds it to
-     * the {@code extensionLoader} and loads the extension's help set.
+     * the {@code extensionManager} and loads the extension's help set.
      *
-     * @param extensionLoader the extension loader
+     * @param extensionManager the extension loader
      * @param extension the extension
      * @see #loadMessages(Extension)
-     * @see ExtensionLoader#addExtension(Extension)
+     * @see ExtensionManager#addExtension(Extension)
      * @see #intitializeHelpSet(Extension)
      */
-    private static void loadMessagesAndAddExtension(ExtensionLoader extensionLoader, Extension extension) {
+    private static void loadMessagesAndAddExtension(ExtensionManager extensionManager, Extension extension) {
         loadMessages(extension);
         if (extension.isEnabled() && extension.supportsDb(Model.getSingleton().getDb().getType()) &&  
         		(extension.supportsLowMemory() || ! Constant.isLowMemoryOptionSet())) {
-            extensionLoader.addExtension(extension);
+            extensionManager.addExtension(extension);
             intitializeHelpSet(extension);
         } else if (!extension.supportsDb(Model.getSingleton().getDb().getType())) {
             log.debug("Not loading extension " + extension.getName() + ": doesnt support " + Model.getSingleton().getDb().getType());
@@ -181,7 +181,7 @@ public class ExtensionFactory {
     }
 
     public static synchronized void addAddOnExtension(
-            ExtensionLoader extensionLoader,
+            ExtensionManager extensionManager,
             Configuration config,
             Extension extension) {
         synchronized (mapAllExtension) {
@@ -190,7 +190,7 @@ public class ExtensionFactory {
             if (extension.isEnabled()) {
                 log.debug("Adding new extension " + extension.getName());
             }
-            loadMessagesAndAddExtension(extensionLoader, extension);
+            loadMessagesAndAddExtension(extensionManager, extension);
         }
     }
 
@@ -229,7 +229,7 @@ public class ExtensionFactory {
         }
     }
 
-    public static synchronized List<Extension> loadAddOnExtensions(ExtensionLoader extensionLoader, Configuration config, AddOn addOn) {
+    public static synchronized List<Extension> loadAddOnExtensions(ExtensionManager extensionManager, Configuration config, AddOn addOn) {
         List<Extension> listExts = getAddOnLoader().getExtensions(addOn);
 
         synchronized (mapAllExtension) {
@@ -241,7 +241,7 @@ public class ExtensionFactory {
                 if (ext.isEnabled()) {
                     log.debug("Adding new extension " + ext.getName());
                 }
-                loadMessagesAndAddExtension(extensionLoader, ext);
+                loadMessagesAndAddExtension(extensionManager, ext);
             }
         }
         return listExts;

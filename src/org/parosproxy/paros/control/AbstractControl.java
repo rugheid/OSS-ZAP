@@ -22,14 +22,14 @@
 // ZAP: 2014/08/14 Issue 1282: Extension#stop() is never called before destroy()
 package org.parosproxy.paros.control;
 
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.view.View;
 
 
 public abstract class AbstractControl {
 
-    protected ExtensionLoader loader = null;
+    protected ExtensionManager loader = null;
     protected Model model = null;
     protected View view = null;
     
@@ -38,9 +38,9 @@ public abstract class AbstractControl {
         this.view = view;
     }
     
-    public ExtensionLoader getExtensionLoader() {
+    public ExtensionManager getExtensionLoader() {
         if (loader == null) {
-            loader = new ExtensionLoader(model, view);
+            loader = new ExtensionManager(model, view);
         }
         return loader;
     }

@@ -40,7 +40,7 @@ import org.parosproxy.paros.db.RecordParam;
 import org.parosproxy.paros.extension.ExtensionAdaptor;
 import org.parosproxy.paros.extension.ExtensionHook;
 import org.parosproxy.paros.extension.ExtensionHookView;
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.extension.SessionChangedListener;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.model.Session;
@@ -89,7 +89,7 @@ public class ExtensionParams extends ExtensionAdaptor
 			ExtensionHookView pv = extensionHook.getHookView();
 	        extensionHook.getHookView().addStatusPanel(getParamsPanel());
 
-            final ExtensionLoader extLoader = Control.getSingleton().getExtensionLoader();
+            final ExtensionManager extLoader = Control.getSingleton().getExtensionLoader();
             if (extLoader.isExtensionEnabled(ExtensionSearch.NAME)) {
                 extensionHook.getHookMenu().addPopupMenuItem(getPopupMenuParamSearch());
             }

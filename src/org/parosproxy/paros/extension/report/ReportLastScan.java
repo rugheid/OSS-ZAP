@@ -43,7 +43,7 @@ import org.apache.log4j.Logger;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.control.Control;
 import org.parosproxy.paros.extension.Extension;
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.model.SiteMap;
@@ -107,7 +107,7 @@ public class ReportLastScan {
     
     public StringBuilder getExtensionsXML(SiteNode site) {
         StringBuilder extensionXml = new StringBuilder();
-        ExtensionLoader loader = Control.getSingleton().getExtensionLoader();
+        ExtensionManager loader = Control.getSingleton().getExtensionLoader();
         int extensionCount = loader.getExtensionCount();
         for(int i=0; i<extensionCount; i++) {
             Extension extension = loader.getExtension(i);

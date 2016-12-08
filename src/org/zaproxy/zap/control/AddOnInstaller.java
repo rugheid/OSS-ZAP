@@ -36,7 +36,7 @@ import org.parosproxy.paros.control.Control;
 import org.parosproxy.paros.core.scanner.AbstractPlugin;
 import org.parosproxy.paros.core.scanner.PluginFactory;
 import org.parosproxy.paros.extension.Extension;
-import org.parosproxy.paros.extension.ExtensionLoader;
+import org.parosproxy.paros.extension.ExtensionManager;
 import org.parosproxy.paros.model.Model;
 import org.zaproxy.zap.extension.pscan.ExtensionPassiveScan;
 import org.zaproxy.zap.extension.pscan.PassiveScanner;
@@ -173,32 +173,32 @@ public final class AddOnInstaller {
     }
 
     private static List<Extension> installAddOnExtensions(AddOn addOn) {
-        ExtensionLoader extensionLoader = Control.getSingleton().getExtensionLoader();
-        List<Extension> listExts = ExtensionFactory.loadAddOnExtensions(extensionLoader, Model.getSingleton()
+        ExtensionManager extensionManager = Control.getSingleton().getExtensionLoader();
+        List<Extension> listExts = ExtensionFactory.loadAddOnExtensions(extensionManager, Model.getSingleton()
                 .getOptionsParam()
                 .getConfig(), addOn);
 
         for (Extension ext : listExts) {
-            installAddOnExtensionImpl(addOn, ext, extensionLoader);
+            installAddOnExtensionImpl(addOn, ext, extensionManager);
         }
 
         return listExts;
     }
     
     public static void installAddOnExtension(AddOn addOn, Extension ext) {
-        ExtensionLoader extensionLoader = Control.getSingleton().getExtensionLoader();
-        ExtensionFactory.addAddOnExtension(extensionLoader, Model.getSingleton()
+        ExtensionManager extensionManager = Control.getSingleton().getExtensionLoader();
+        ExtensionFactory.addAddOnExtension(extensionManager, Model.getSingleton()
                 .getOptionsParam()
                 .getConfig(), ext);
 
-        installAddOnExtensionImpl(addOn, ext, extensionLoader);
+        installAddOnExtensionImpl(addOn, ext, extensionManager);
     }
     
-    private static void installAddOnExtensionImpl(AddOn addOn, Extension ext, ExtensionLoader extensionLoader) {
+    private static void installAddOnExtensionImpl(AddOn addOn, Extension ext, ExtensionManager extensionManager) {
         if (ext.isEnabled()) {
             logger.debug("Starting extension " + ext.getName());
             try {
-                extensionLoader.startLifeCycle(ext);
+                extensionManager.startLifeCycle(ext);
             } catch (Exception e) {
                 logger.error("An error occurred while installing the add-on: " + addOn.getId(), e);
             }
