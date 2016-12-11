@@ -197,7 +197,6 @@
   </xsl:template>
 
   <xsl:template match="evidence">
-  <xsl:if test="text() !=''">
   <tr bgcolor="#e8e8e8" valign="top"> 
     <td width="20%"><blockquote><font size="2" face="Arial, Helvetica, sans-serif"><p>Evidence</p></font></blockquote></td>
     <td width="80%">
@@ -205,7 +204,6 @@
     <p><xsl:apply-templates select="text()|*"/></p>
     </font></td>
   </tr>
-  </xsl:if>
   </xsl:template>
 
   <xsl:template match="instances/instance/uri">
@@ -253,7 +251,6 @@
   </xsl:template>
 
   <xsl:template match="instances/instance/evidence">
-  <xsl:if test="text() !=''">
   <tr bgcolor="#e8e8e8" valign="top"> 
     <td width="20%"><blockquote><font size="2" face="Arial, Helvetica, sans-serif"><p>&#160;&#160;&#160;&#160;Evidence</p></font></blockquote></td>
     <td width="80%">
@@ -261,7 +258,6 @@
     <p><xsl:apply-templates select="text()|*"/></p>
     </font></td>
   </tr>
-  </xsl:if>
   </xsl:template>
 
   <xsl:template match="count">

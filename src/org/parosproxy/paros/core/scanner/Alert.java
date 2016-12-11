@@ -742,7 +742,7 @@ public class Alert implements Comparable<Alert>  {
         	sb.append("  <attack>").append(replaceEntity(attack)).append("</attack>\r\n");
         }
         if (evidence != null && evidence.length() > 0) {
-            sb.append("  <evidence>").append(replaceEntity(evidence)).append("</evidence>\r\n");
+            sb.append("  <evidence>").append(paragraph(replaceEntity(evidence))).append("</evidence>\r\n");
         }
         return sb.toString();
     }
