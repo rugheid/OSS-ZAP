@@ -55,8 +55,7 @@ public class Statistic {
 		return data.stream().mapToInt(a -> a).sum() / data.size();
 	}
 	
-	@Override
-	public String toString() {
+	public String toReportString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Maximum ").append(this.name).append(": ");
 		sb.append(this.getMaximum()).append("\n");

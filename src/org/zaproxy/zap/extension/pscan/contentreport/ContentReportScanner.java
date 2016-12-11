@@ -18,13 +18,17 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.core.scanner.Alert;
 import org.parosproxy.paros.core.scanner.Category;
+import org.parosproxy.paros.model.HistoryReference;
 import org.parosproxy.paros.network.HttpMessage;
 import org.zaproxy.zap.extension.pscan.PassiveScanThread;
 import org.zaproxy.zap.extension.pscan.PluginPassiveScanner;
@@ -42,16 +46,6 @@ public class ContentReportScanner extends PluginPassiveScanner {
 	private static final Logger logger = Logger.getLogger(ContentReportScanner.class);
 	
 	private HashMap<String, SiteStatistic> statisticMap = new HashMap<String, SiteStatistic>();
-	
-	/*
-	 * file statistics: %png, jpg, ..
-	 * image height
-	 * image width
-	 * image filesize
-	 */
-	
-	// ExtensionAlert extAlert = (ExtensionAlert) Control.getSingleton().getExtensionLoader().getExtension(ExtensionAlert.NAME);
-
 
 	@Override
 	public void setParent (PassiveScanThread parent) {
@@ -60,7 +54,6 @@ public class ContentReportScanner extends PluginPassiveScanner {
 
 	@Override
 	public void scanHttpRequestSend(HttpMessage msg, int id) {
-		// You can also detect potential vulnerabilities here, with the same caveats as below.
 	}
 
 	@Override
@@ -74,36 +67,14 @@ public class ContentReportScanner extends PluginPassiveScanner {
 
 	@Override
 	public void scanHttpResponseReceive(HttpMessage msg, int id, Source source) {
-		logger.info("\tpassed the contentreportscanner.. and image is " + msg.getResponseHeader().isImage() + " with url " + msg.getRequestHeader().getURI());
 		if (msg.getResponseHeader().isEmpty() || !msg.getResponseHeader().isImage()) return;
 		long start = System.currentTimeMillis();
 		
 		try {
-			URI uri = msg.getRequestHeader().getURI();
-			SiteStatistic statistics = this.getStatisticsForSite(uri);
+			
+			SiteStatistic statistics = this.getStatisticsForSite(msg, id);
 			statistics.addEntry(msg);
-		
-
-		    Alert alert = new Alert(getPluginId(), Alert.RISK_INFO, Alert.CONFIDENCE_HIGH, 
-			    	getName());
-			    	alert.setDetail(
-						getDescription(), 
-						msg.getRequestHeader().getURI().toString(),
-						"",	// Param
-						"", // Attack
-						"hi there", // Other info
-						getSolution(), 
-					    getReference(), 
-					    statistics.toString(),	// Evidence
-					    0,	// CWE Id
-					    0,	// WASC Id
-					    msg);
-	
-	    	parent.raiseAlert(id, alert);
-			logger.debug("\tScan of record " + id + " took " + (System.currentTimeMillis() - start) + " ms");
-			if (logger.isDebugEnabled()) {
-				logger.debug("\tScan of record " + id + " took " + (System.currentTimeMillis() - start) + " ms");
-			}
+			
 		} catch (URIException e) {
 			// TODO
 			e.printStackTrace();
@@ -111,26 +82,46 @@ public class ContentReportScanner extends PluginPassiveScanner {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		logger.debug("\tScan of record " + id + " took " + (System.currentTimeMillis() - start) + " ms");
 	}
 	
-
-	
-	private SiteStatistic getStatisticsForSite(URI uri) throws URIException {
-		String site = uri.getHost();
+	private SiteStatistic getStatisticsForSite(HttpMessage msg, int id) throws URIException {
+		String site = msg.getRequestHeader().getURI().getHost();
 		if (!this.statisticMap.containsKey(site)) {
-			this.statisticMap.put(site, new SiteStatistic());
+			Alert alert = prepareAlert(msg);
+			parent.raiseAlert(id, alert);
+			this.statisticMap.put(site, new SiteStatistic(alert));
 		}
 		SiteStatistic statistics = this.statisticMap.get(site);
 		return statistics;
 	}
 
+	public Alert prepareAlert(HttpMessage msg) throws URIException {
+		Alert alert = new Alert(getPluginId(), Alert.RISK_INFO, Alert.CONFIDENCE_HIGH, 
+		    	getName());
+		alert.setDetail(
+			getDescription(), 
+			msg.getRequestHeader().getURI().getHost().toString(),
+			"",	// Param
+			"", // Attack
+			"", // Other info
+			getSolution(), 
+		    getReference(), 
+		    "no images", // Evidence
+		    0,	// CWE Id
+		    0,	// WASC Id
+		    msg); // HttpMessage
+		return alert;
+	}
+	
 	@Override
 	public String getName() {
-    	return "Content reporter scanner";
+    	return "Image Statistics";
 	}
 	
     public String getDescription() {
-    	return "See iteration 4"; //TODO
+    	return "Statistics about images on visited websites."; //TODO
     }
 
     public int getCategory() {
@@ -138,16 +129,19 @@ public class ContentReportScanner extends PluginPassiveScanner {
     }
 
     public String getSolution() {
-    	return "You're stuck here forever"; //TODO
+    	return ""; //TODO
     }
 
     public String getReference() {
-    	return "How can you stop him, when he's already here."; //TODO
+    	return ""; //TODO
     }
 
-    @Override
-	public boolean appliesToHistoryType (int historyType) {
-		// TODO: base on HistoryReference (6: HIDDEN)
-		return true;
+	@Override
+	public boolean appliesToHistoryType(int historyType) {
+		Integer[] historyTypes = new Integer[] { HistoryReference.TYPE_PROXIED, HistoryReference.TYPE_ZAP_USER,
+				HistoryReference.TYPE_SPIDER, HistoryReference.TYPE_SPIDER_AJAX, HistoryReference.TYPE_HIDDEN };
+		Set<Integer> historyTypeSet = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(historyTypes)));
+		return historyTypeSet.contains(historyType);
 	};
+
 }
