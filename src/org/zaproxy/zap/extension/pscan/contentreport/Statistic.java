@@ -48,10 +48,16 @@ public class Statistic {
 	}
 	
 	public int getMedian() {
+		if (!(data.size() > 0)) {
+			return 0;
+		}
 		return data.get(data.size()/2);
 	}
 	
 	public int getAverage() {
+		if (!(data.size() > 0)) {
+			return 0;
+		}
 		return data.stream().mapToInt(a -> a).sum() / data.size();
 	}
 	
@@ -59,8 +65,12 @@ public class Statistic {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Maximum ").append(this.name).append(": ");
 		sb.append(this.getMaximum()).append("\n");
+		sb.append("URI Maximum ").append(this.name).append(": ");
+		sb.append(this.getMaximumURI()).append("\n");
 		sb.append("Minimum ").append(this.name).append(": ");
 		sb.append(this.getMinimum()).append("\n");
+		sb.append("URI Minimum ").append(this.name).append(": ");
+		sb.append(this.getMinimumURI()).append("\n");
 		sb.append("Average ").append(this.name).append(": ");
 		sb.append(this.getAverage()).append("\n");
 		sb.append("Median ").append(this.name).append(": ");

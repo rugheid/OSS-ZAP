@@ -42,10 +42,15 @@ import net.htmlparser.jericho.Source;
  */
 public class ContentReportScanner extends PluginPassiveScanner {
 
+	public static Integer[] historyTypes = new Integer[] { HistoryReference.TYPE_PROXIED, HistoryReference.TYPE_ZAP_USER,
+			HistoryReference.TYPE_SPIDER, HistoryReference.TYPE_SPIDER_AJAX, HistoryReference.TYPE_HIDDEN };
+	public static Set<Integer> historyTypeSet = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(historyTypes)));
+	
 	private PassiveScanThread parent = null;
 	private static final Logger logger = Logger.getLogger(ContentReportScanner.class);
 	
 	private HashMap<String, SiteStatistic> statisticMap = new HashMap<String, SiteStatistic>();
+	private HashMap<String, Alert> alertMap = new HashMap<>();
 
 	@Override
 	public void setParent (PassiveScanThread parent) {
@@ -73,14 +78,14 @@ public class ContentReportScanner extends PluginPassiveScanner {
 		try {
 			
 			SiteStatistic statistics = this.getStatisticsForSite(msg, id);
+			Alert alert = this.getAlertForSite(msg, id);
 			statistics.addEntry(msg);
+			alert.setEvidence(statistics.toReportString());
 			
 		} catch (URIException e) {
-			// TODO
-			e.printStackTrace();
+			logger.error("URIException in the ContentReportScanner", e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("IOException in the ContentReportScanner", e);
 		}
 		
 		logger.debug("\tScan of record " + id + " took " + (System.currentTimeMillis() - start) + " ms");
@@ -89,13 +94,23 @@ public class ContentReportScanner extends PluginPassiveScanner {
 	private SiteStatistic getStatisticsForSite(HttpMessage msg, int id) throws URIException {
 		String site = msg.getRequestHeader().getURI().getHost();
 		if (!this.statisticMap.containsKey(site)) {
-			Alert alert = prepareAlert(msg);
-			parent.raiseAlert(id, alert);
-			this.statisticMap.put(site, new SiteStatistic(alert));
+			this.statisticMap.put(site, new SiteStatistic());
 		}
 		SiteStatistic statistics = this.statisticMap.get(site);
 		return statistics;
 	}
+	
+	private Alert getAlertForSite(HttpMessage msg, int id) throws URIException {
+		String site = msg.getRequestHeader().getURI().getHost();
+		if (!this.alertMap.containsKey(site)) {
+			Alert alert = prepareAlert(msg);
+			parent.raiseAlert(id, alert);
+			this.alertMap.put(site, alert);
+		}
+		Alert alert = this.alertMap.get(site);
+		return alert;
+	}
+
 
 	public Alert prepareAlert(HttpMessage msg) throws URIException {
 		Alert alert = new Alert(getPluginId(), Alert.RISK_INFO, Alert.CONFIDENCE_HIGH, 
@@ -108,7 +123,7 @@ public class ContentReportScanner extends PluginPassiveScanner {
 			"", // Other info
 			getSolution(), 
 		    getReference(), 
-		    "no images", // Evidence
+		    "no decodable images", // Evidence
 		    0,	// CWE Id
 		    0,	// WASC Id
 		    msg); // HttpMessage
@@ -121,7 +136,7 @@ public class ContentReportScanner extends PluginPassiveScanner {
 	}
 	
     public String getDescription() {
-    	return "Statistics about images on visited websites."; //TODO
+    	return "Statistics about images on visited websites.";
     }
 
     public int getCategory() {
@@ -129,18 +144,15 @@ public class ContentReportScanner extends PluginPassiveScanner {
     }
 
     public String getSolution() {
-    	return ""; //TODO
+    	return "";
     }
 
     public String getReference() {
-    	return ""; //TODO
+    	return "";
     }
 
 	@Override
 	public boolean appliesToHistoryType(int historyType) {
-		Integer[] historyTypes = new Integer[] { HistoryReference.TYPE_PROXIED, HistoryReference.TYPE_ZAP_USER,
-				HistoryReference.TYPE_SPIDER, HistoryReference.TYPE_SPIDER_AJAX, HistoryReference.TYPE_HIDDEN };
-		Set<Integer> historyTypeSet = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(historyTypes)));
 		return historyTypeSet.contains(historyType);
 	};
 
