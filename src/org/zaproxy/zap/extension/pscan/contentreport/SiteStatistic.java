@@ -1,62 +1,32 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 
 import org.parosproxy.paros.network.HttpMessage;
 
 public class SiteStatistic {
 	
-	public NumberStatistic imageHeight;
-	public NumberStatistic imageWidth;
-	public NumberStatistic imageFileSize;
-	public PercentageStatistic imageType;
+	public ImageNumberStatistic imageHeight;
+	public ImageNumberStatistic imageWidth;
+	public ImageNumberStatistic imageFileSize;
+	public ExtensionPercentageStatistic imageType;
 	
 	SiteStatistic() {
-		this.imageHeight = new NumberStatistic("height");
-		this.imageWidth = new NumberStatistic("width");
-		this.imageFileSize = new NumberStatistic("file size");
-		this.imageType = new PercentageStatistic();
+		this.imageHeight = new HeightStatistic();
+		this.imageWidth = new WidthStatistic();
+		this.imageFileSize = new ImageSizeStatistic();
+		this.imageType = new ExtensionPercentageStatistic();
 	}
 	
 	public void addEntry(HttpMessage msg) throws IOException {
-		String uri = msg.getRequestHeader().getURI().toString();
-		BufferedImage image = imageFromBytes(msg.getResponseBody().getBytes());
-		String extension = extensionOfImageFromBytes(msg.getResponseBody().getBytes());
-		
-		if (image == null || extension == null) {
-			return;
-		}
-		
-		this.imageHeight.addEntry(image.getHeight(), uri);
-		this.imageWidth.addEntry(image.getWidth(), uri);
-		this.imageFileSize.addEntry(msg.getResponseBody().getBytes().length, uri);
-		this.imageType.addEntry(1, extension);
+		this.imageHeight.addEntry(msg);
+		this.imageWidth.addEntry(msg);
+		this.imageFileSize.addEntry(msg);
+		this.imageType.addEntry(msg);
 	}
 
-	
-    static BufferedImage imageFromBytes(byte[] bytes) throws IOException {
-        InputStream in = new ByteArrayInputStream(bytes);
-        return ImageIO.read(in);
-	}
-    
-    static String extensionOfImageFromBytes(byte[] bytes) throws IOException{
-    	String extension = null;
-		ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(bytes));
-		Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-		if (readers.hasNext()) {
-		    ImageReader read = readers.next();
-		    extension = read.getFormatName();
-		}
-		return extension;
-    }
+
+
 	
 	public String toReportString() {
 		StringBuilder sb = new StringBuilder();

@@ -1,8 +1,10 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
+import org.parosproxy.paros.network.HttpMessage;
+
 public interface Statistic {
 	
-	void addEntry(int entry, String label);
+	void addEntry(HttpMessage msg);
 	
 	String toReportString();
 
