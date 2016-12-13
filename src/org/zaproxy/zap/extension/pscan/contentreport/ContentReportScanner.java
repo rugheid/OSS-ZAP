@@ -63,10 +63,6 @@ public class ContentReportScanner extends PluginPassiveScanner {
 
 	@Override
 	public int getPluginId() {
-		/*
-		 * This should be unique across all active and passive rules.
-		 * The master list is https://github.com/zaproxy/zaproxy/blob/develop/src/doc/alerts.xml
-		 */
 		return 61337;
 	}
 
@@ -121,8 +117,8 @@ public class ContentReportScanner extends PluginPassiveScanner {
 			"",	// Param
 			"", // Attack
 			"", // Other info
-			getSolution(), 
-		    getReference(), 
+			"", // Solution
+		    "", // Reference
 		    "no decodable images", // Evidence
 		    0,	// CWE Id
 		    0,	// WASC Id
@@ -141,14 +137,6 @@ public class ContentReportScanner extends PluginPassiveScanner {
 
     public int getCategory() {
         return Category.INFO_GATHER;
-    }
-
-    public String getSolution() {
-    	return "";
-    }
-
-    public String getReference() {
-    	return "";
     }
 
 	@Override

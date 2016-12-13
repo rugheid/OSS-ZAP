@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
@@ -12,24 +13,33 @@ import org.apache.commons.httpclient.URI;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.network.HttpMessage;
 
-public abstract class ImageNumberStatistic implements Statistic {
+public class ImageNumberStatistic implements Statistic {
 	
-	public static final String name = "statistic";
+	public final String name;
 	private ArrayList<Integer> data = new ArrayList<Integer>();
 	private int maximum = Integer.MIN_VALUE;
 	private URI maxURI;
 	private int minimum = Integer.MAX_VALUE;
 	private URI minURI;
+	private Function<HttpMessage, Integer> parseMessage;
 
 	
-	abstract int parseMessage(HttpMessage msg) throws IOException;
-
+	ImageNumberStatistic(String name, Function<HttpMessage, Integer> fn) {
+		this.name = name;
+		this.parseMessage = fn;
+	}
+	
 	public void addEntry(HttpMessage msg) {
-		int entry;
+		Integer entry;
 		try {
-			entry = parseMessage(msg);
-		} catch (IOException e) {
-			Logger.getLogger(ImageNumberStatistic.class).error("Image could not be decoded.", e);
+			entry = this.parseMessage.apply(msg);
+		} catch (NullPointerException e) {
+			Logger.getLogger(ImageNumberStatistic.class).info("Failed to decode image.");
+			return;
+		}
+
+		if (entry == null) {
+			Logger.getLogger(ImageNumberStatistic.class).info("object got trough with entry: " + entry);
 			return;
 		}
 		data.add(entry);
@@ -74,9 +84,13 @@ public abstract class ImageNumberStatistic implements Statistic {
 	}
 	
 	
-    static BufferedImage imageFromBytes(byte[] bytes) throws IOException {
-        InputStream in = new ByteArrayInputStream(bytes);
-        return ImageIO.read(in);
+    static BufferedImage imageFromBytes(byte[] bytes) {
+        try {
+        	InputStream in = new ByteArrayInputStream(bytes);
+			return ImageIO.read(in);
+		} catch (IOException e) {
+			return null;
+		}
 	}
     
     
