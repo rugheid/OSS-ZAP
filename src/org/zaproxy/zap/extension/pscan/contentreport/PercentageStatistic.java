@@ -2,7 +2,7 @@ package org.zaproxy.zap.extension.pscan.contentreport;
 
 import java.util.HashMap;
 
-public class PercentageStatistic {
+public class PercentageStatistic implements Statistic {
 	
 	private HashMap<String, Integer> nbExtension;
 	private int totalImages;
@@ -11,12 +11,12 @@ public class PercentageStatistic {
 		nbExtension = new HashMap<>();
 	}
 	
-	public void addEntry(String extension) {
-		totalImages++;
+	public void addEntry(int entry, String extension) {
+		totalImages = totalImages + entry;
 		if (! this.nbExtension.containsKey(extension)) {
-			this.nbExtension.put(extension, 1);
+			this.nbExtension.put(extension, entry);
 		} else {
-			this.nbExtension.replace(extension, this.nbExtension.get(extension) + 1);
+			this.nbExtension.replace(extension, this.nbExtension.get(extension) + entry);
 		}
 	}
 	

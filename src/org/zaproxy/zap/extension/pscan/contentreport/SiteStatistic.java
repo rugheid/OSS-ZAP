@@ -10,26 +10,24 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import org.apache.commons.httpclient.URI;
-import org.parosproxy.paros.core.scanner.Alert;
 import org.parosproxy.paros.network.HttpMessage;
 
 public class SiteStatistic {
 	
-	public Statistic imageHeight;
-	public Statistic imageWidth;
-	public Statistic imageFileSize;
+	public NumberStatistic imageHeight;
+	public NumberStatistic imageWidth;
+	public NumberStatistic imageFileSize;
 	public PercentageStatistic imageType;
 	
 	SiteStatistic() {
-		this.imageHeight = new Statistic("height");
-		this.imageWidth = new Statistic("width");
-		this.imageFileSize = new Statistic("file size");
+		this.imageHeight = new NumberStatistic("height");
+		this.imageWidth = new NumberStatistic("width");
+		this.imageFileSize = new NumberStatistic("file size");
 		this.imageType = new PercentageStatistic();
 	}
 	
 	public void addEntry(HttpMessage msg) throws IOException {
-		URI uri = msg.getRequestHeader().getURI();
+		String uri = msg.getRequestHeader().getURI().toString();
 		BufferedImage image = imageFromBytes(msg.getResponseBody().getBytes());
 		String extension = extensionOfImageFromBytes(msg.getResponseBody().getBytes());
 		
@@ -40,7 +38,7 @@ public class SiteStatistic {
 		this.imageHeight.addEntry(image.getHeight(), uri);
 		this.imageWidth.addEntry(image.getWidth(), uri);
 		this.imageFileSize.addEntry(msg.getResponseBody().getBytes().length, uri);
-		this.imageType.addEntry(extension);
+		this.imageType.addEntry(1, extension);
 	}
 
 	
