@@ -1,5 +1,6 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ public class SiteStatistic {
 	ArrayList<Statistic> statistics = new ArrayList<>();
 	
 	SiteStatistic() {
-		statistics.add(new ImageNumberStatistic("height", msg -> ImageNumberStatistic.imageFromBytes(msg.getResponseBody().getBytes()).getHeight()));
-		statistics.add(new ImageNumberStatistic("width", msg -> ImageNumberStatistic.imageFromBytes(msg.getResponseBody().getBytes()).getWidth()));
+		statistics.add(new ImagePropertyStatistic("height", BufferedImage::getHeight));
+		statistics.add(new ImagePropertyStatistic("width", BufferedImage::getWidth));
 		statistics.add(new ImageNumberStatistic("file size", msg -> msg.getResponseBody().getBytes().length));
 		statistics.add(new ExtensionPercentageStatistic());
 	}
