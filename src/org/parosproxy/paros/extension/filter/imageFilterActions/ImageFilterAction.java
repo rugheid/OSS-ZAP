@@ -13,7 +13,7 @@ import org.parosproxy.paros.network.HttpMessage;
 
 public abstract class ImageFilterAction {
 
-    private Boolean enabled;
+    private Boolean enabled = false;
 
     public Boolean isEnabled() {
         return enabled;
