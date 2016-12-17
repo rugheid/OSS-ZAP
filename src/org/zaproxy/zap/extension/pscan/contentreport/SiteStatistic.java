@@ -12,9 +12,12 @@ public class SiteStatistic implements Statistic {
 	private ArrayList<Statistic> statistics = new ArrayList<>();
 	
 	SiteStatistic() {
-	    statistics.add(new ImageHeightStatistic());
-	    statistics.add(new ImageWidthStatistic());
-	    statistics.add(new ImageSizeStatistic());
+	    statistics.add(new ImageNumberStatistic("height",
+				msg -> ImageNumberStatistic.imageFromBytes(msg.getResponseBody().getBytes()).getHeight()));
+	    statistics.add(new ImageNumberStatistic("width",
+                msg -> ImageNumberStatistic.imageFromBytes(msg.getResponseBody().getBytes()).getWidth()));
+	    statistics.add(new ImageNumberStatistic("file size",
+                msg -> msg.getResponseBody().getBytes().length));
 	    statistics.add(new ImageExtensionStatistic());
 	}
 

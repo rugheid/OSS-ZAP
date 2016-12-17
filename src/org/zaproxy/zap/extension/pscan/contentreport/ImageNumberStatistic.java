@@ -10,8 +10,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.function.Function;
 
-public abstract class ImageNumberStatistic implements Statistic {
+public class ImageNumberStatistic implements Statistic {
 	
 	public final String name;
 	private ArrayList<Integer> data = new ArrayList<>();
@@ -19,19 +20,19 @@ public abstract class ImageNumberStatistic implements Statistic {
 	private URI maxURI;
 	private int minimum = Integer.MAX_VALUE;
 	private URI minURI;
+    private final Function<HttpMessage, Integer> parseMessage;
 
-	ImageNumberStatistic(String name) {
+	ImageNumberStatistic(String name, Function<HttpMessage, Integer> fn) {
 		this.name = name;
+		this.parseMessage = fn;
 	}
-
-	abstract int parseMessage(HttpMessage msg) throws IOException;
 
 	public void addEntry(HttpMessage msg) {
 		int entry;
 		try {
-			entry = parseMessage(msg);
-		} catch (IOException e) {
-			Logger.getLogger(ImageNumberStatistic.class).error("Image could not be decoded.", e);
+			entry = this.parseMessage.apply(msg);
+		} catch (NullPointerException e) {
+            Logger.getLogger(ImageNumberStatistic.class).info("Failed to decode image.");
 			return;
 		}
 		data.add(entry);
@@ -75,9 +76,13 @@ public abstract class ImageNumberStatistic implements Statistic {
 		return data.stream().mapToInt(a -> a).sum() / data.size();
 	}
 
-    static BufferedImage imageFromBytes(byte[] bytes) throws IOException {
-        InputStream in = new ByteArrayInputStream(bytes);
-        return ImageIO.read(in);
+    static BufferedImage imageFromBytes(byte[] bytes) {
+		try{
+			InputStream in = new ByteArrayInputStream(bytes);
+			return ImageIO.read(in);
+		} catch (IOException e) {
+            return null;
+		}
 	}
 
 	public String toReportString() {
