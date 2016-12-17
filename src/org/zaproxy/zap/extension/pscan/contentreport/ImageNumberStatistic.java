@@ -1,27 +1,29 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
+import org.apache.commons.httpclient.URI;
+import org.apache.log4j.Logger;
+import org.parosproxy.paros.network.HttpMessage;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
-import org.apache.commons.httpclient.URI;
-import org.apache.log4j.Logger;
-import org.parosproxy.paros.network.HttpMessage;
-
 public abstract class ImageNumberStatistic implements Statistic {
 	
-	public static final String name = "statistic";
-	private ArrayList<Integer> data = new ArrayList<Integer>();
+	public final String name;
+	private ArrayList<Integer> data = new ArrayList<>();
 	private int maximum = Integer.MIN_VALUE;
 	private URI maxURI;
 	private int minimum = Integer.MAX_VALUE;
 	private URI minURI;
 
-	
+	ImageNumberStatistic(String name) {
+		this.name = name;
+	}
+
 	abstract int parseMessage(HttpMessage msg) throws IOException;
 
 	public void addEntry(HttpMessage msg) {
@@ -72,14 +74,12 @@ public abstract class ImageNumberStatistic implements Statistic {
 		}
 		return data.stream().mapToInt(a -> a).sum() / data.size();
 	}
-	
-	
+
     static BufferedImage imageFromBytes(byte[] bytes) throws IOException {
         InputStream in = new ByteArrayInputStream(bytes);
         return ImageIO.read(in);
 	}
-    
-    
+
 	public String toReportString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Maximum ").append(name).append(": ");

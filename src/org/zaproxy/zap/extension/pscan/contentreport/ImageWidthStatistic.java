@@ -1,13 +1,15 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
+import org.parosproxy.paros.network.HttpMessage;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import org.parosproxy.paros.network.HttpMessage;
+public class ImageWidthStatistic extends ImageNumberStatistic {
 
-public class WidthStatistic extends ImageNumberStatistic {
-
-	public static final String name = "width";
+	ImageWidthStatistic() {
+		super("width");
+	}
 
 	@Override
 	int parseMessage(HttpMessage msg) throws IOException {

@@ -1,39 +1,33 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
-import java.io.IOException;
-
+import org.apache.commons.lang.StringUtils;
 import org.parosproxy.paros.network.HttpMessage;
 
-public class SiteStatistic {
-	
-	public ImageNumberStatistic imageHeight;
-	public ImageNumberStatistic imageWidth;
-	public ImageNumberStatistic imageFileSize;
-	public ExtensionPercentageStatistic imageType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SiteStatistic implements Statistic {
+
+	private ArrayList<Statistic> statistics = new ArrayList<>();
 	
 	SiteStatistic() {
-		this.imageHeight = new HeightStatistic();
-		this.imageWidth = new WidthStatistic();
-		this.imageFileSize = new ImageSizeStatistic();
-		this.imageType = new ExtensionPercentageStatistic();
-	}
-	
-	public void addEntry(HttpMessage msg) throws IOException {
-		this.imageHeight.addEntry(msg);
-		this.imageWidth.addEntry(msg);
-		this.imageFileSize.addEntry(msg);
-		this.imageType.addEntry(msg);
+	    statistics.add(new ImageHeightStatistic());
+	    statistics.add(new ImageWidthStatistic());
+	    statistics.add(new ImageSizeStatistic());
+	    statistics.add(new ImageExtensionStatistic());
 	}
 
+	@Override
+	public void addEntry(HttpMessage msg) {
+        statistics.forEach(stat -> stat.addEntry(msg));
+	}
 
-
-	
+	@Override
 	public String toReportString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.imageHeight.toReportString()).append("\n------------------------------------\n");
-		sb.append(this.imageWidth.toReportString()).append("\n------------------------------------\n");
-		sb.append(this.imageFileSize.toReportString()).append("\n------------------------------------\n");
-		sb.append(this.imageType.toReportString());
-		return sb.toString();
+        List<String> reports = statistics.stream()
+                                         .map(Statistic::toReportString)
+                                         .collect(Collectors.toList());
+        return StringUtils.join(reports, "\n------------------------------------\n");
 	}
 }

@@ -1,12 +1,14 @@
 package org.zaproxy.zap.extension.pscan.contentreport;
 
-import java.io.IOException;
-
 import org.parosproxy.paros.network.HttpMessage;
+
+import java.io.IOException;
 
 public class ImageSizeStatistic extends ImageNumberStatistic {
 
-	static final String name = "file size";
+	ImageSizeStatistic() {
+	    super("file size");
+    }
 
 	@Override
 	int parseMessage(HttpMessage msg) throws IOException {
