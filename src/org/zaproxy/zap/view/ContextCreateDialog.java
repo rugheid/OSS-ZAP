@@ -30,6 +30,8 @@ import org.zaproxy.zap.model.StructuralSiteNode;
 import org.zaproxy.zap.utils.DisplayUtils;
 import org.zaproxy.zap.utils.ZapTextField;
 
+import javax.swing.*;
+
 public class ContextCreateDialog extends StandardFieldsDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -64,7 +66,7 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 		Context ctx = Model.getSingleton().getSession().getNewContext(nameValue);
         String descValue = ((ZapTextField)this.getField(DESC_FIELD)).getText();
 		ctx.setDescription(descValue);
-		ctx.setInScope(this.getBoolValue(IN_SCOPE_FIELD));
+		ctx.setInScope(((JCheckBox)this.getField(IN_SCOPE_FIELD)).isSelected());
 		if (topNode != null) {
 	        try {
 				ctx.addIncludeInContextRegex(new StructuralSiteNode(topNode).getRegexPattern());

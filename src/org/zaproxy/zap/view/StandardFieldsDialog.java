@@ -980,39 +980,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		return this.fieldMap.get(fieldLabel);
 	}
 
-	/**
-	 * Gets the contents of a {@link JPasswordField} field.
-	 * <p>
-	 * For stronger security, it is recommended that the returned character array be cleared after use by setting each character
-	 * to zero.
-	 * 
-	 * @param fieldLabel the label of the field
-	 * @return the contents of the field, {@code null} if not a {@code JPassword} field.
-	 * @since TODO add version
-	 * @see #setFieldValue(String, String)
-	 * @see #addPasswordField(String, String)
-	 */
-	public char[] getPasswordValue(String fieldLabel) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (!(c instanceof JPasswordField)) {
-			return null;
-		}
-
-		return ((JPasswordField) c).getPassword();
-	}
-	
-	public Context getContextValue(String fieldLabel) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ContextSelectComboBox) {
-				return ((ContextSelectComboBox)c).getSelectedContext();
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-		return null;
-	}
-	
 	public void setFieldValue(String fieldLabel, String value) {
 		Component c = this.fieldMap.get(fieldLabel);
 		if (c != null) {
@@ -1069,33 +1036,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		return true;
 	}
 
-	public int getIntValue(String fieldLabel) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ZapNumberSpinner) {
-				return ((ZapNumberSpinner)c).getValue();
-			} else if (c instanceof JComboBox) {
-				return (Integer)((JComboBox<?>)c).getSelectedItem();
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-		return -1;
-	}
-	
-	public void setFieldValue(String fieldLabel, int value) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ZapNumberSpinner) {
-				((ZapNumberSpinner)c).setValue(value);
-			} else if (c instanceof JComboBox) {
-				((JComboBox<?>)c).setSelectedItem(value);
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-	}
-	
 	public void addReadOnlyField(String fieldLabel, String value, boolean doubleWidth) {
 		if (isTabbed()) {
 			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
@@ -1144,19 +1084,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		this.tabPanels.get(i).add(panel, LayoutHelper.getGBC(0, 0, 1, 1.0D, 1.0D, GridBagConstraints.BOTH));
 	}
 
-	
-	public Boolean getBoolValue(String fieldLabel) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof JCheckBox) {
-				return ((JCheckBox)c).isSelected();
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-		return null;
-	}
-	
 	public void addFieldListener(String fieldLabel, ActionListener listener) {
 		Component c = this.fieldMap.get(fieldLabel);
 		if (c != null) {

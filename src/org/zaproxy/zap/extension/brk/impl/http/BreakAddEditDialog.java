@@ -32,6 +32,8 @@ import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
 
+import javax.swing.*;
+
 public class BreakAddEditDialog extends StandardFieldsDialog {
 
 	private static final String FIELD_LOCATION = "brk.brkpoint.location.label";
@@ -130,8 +132,8 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 						((ZapTextField)this.getField(FIELD_STRING)).getText(),
 						this.strToLoc(((ZapTextField)this.getField(FIELD_LOCATION)).getText()),
 						this.strToMatch(((ZapTextField)this.getField(FIELD_MATCH)).getText()),
-						this.getBoolValue(FIELD_INVERSE),
-						this.getBoolValue(FIELD_IGNORECASE));
+						((JCheckBox)getField(FIELD_INVERSE)).isSelected(),
+						((JCheckBox)getField(FIELD_IGNORECASE)).isSelected());
 		
 		if (add) {
 		    breakPointsManager.addBreakpoint(brk);

@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.log4j.Logger;
@@ -45,6 +45,7 @@ import org.zaproxy.zap.spider.filters.MaxChildrenFetchFilter;
 import org.zaproxy.zap.spider.filters.MaxChildrenParseFilter;
 import org.zaproxy.zap.spider.filters.HttpPrefixFetchFilter;
 import org.zaproxy.zap.users.User;
+import org.zaproxy.zap.utils.ZapNumberSpinner;
 import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
@@ -158,7 +159,7 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.addFieldInTab(FIELD_HANDLE_ODATA, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isHandleODataParametersVisited()), 1);
         this.addPadding(1);
 
-    	if (! getBoolValue(FIELD_PROCESS_FORMS)) {
+    	if (! ((JCheckBox)getField(FIELD_PROCESS_FORMS)).isSelected()) {
         	setFieldValue(FIELD_POST_FORMS, false);
         	getField(FIELD_POST_FORMS).setEnabled(false);
     	}
@@ -172,7 +173,7 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.addFieldListener(FIELD_PROCESS_FORMS, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	if (getBoolValue(FIELD_PROCESS_FORMS)) {
+            	if (((JCheckBox)getField(FIELD_PROCESS_FORMS)).isSelected()) {
                 	getField(FIELD_POST_FORMS).setEnabled(true);
             	} else {
                 	setFieldValue(FIELD_POST_FORMS, false);
@@ -183,7 +184,7 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.addFieldListener(FIELD_ADVANCED, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setAdvancedTabs(getBoolValue(FIELD_ADVANCED));
+                setAdvancedTabs(((JCheckBox)getField(FIELD_ADVANCED)).isSelected());
             }
         });
 
@@ -323,22 +324,22 @@ public class SpiderDialog extends StandardFieldsDialog {
 		} catch (Exception e1) {
 			// Ignore - will have been checked in validateParams
 		}
-        if (this.getBoolValue(FIELD_ADVANCED)) {
+        if (((JCheckBox)getField(FIELD_ADVANCED)).isSelected()) {
         	// Set the advanced options
-        	spiderParam.setMaxDepth(this.getIntValue(FIELD_MAX_DEPTH));
-        	spiderParam.setMaxDuration(this.getIntValue(FIELD_MAX_DURATION));
-        	spiderParam.setSendRefererHeader(this.getBoolValue(FIELD_SEND_REFERER));
-        	spiderParam.setProcessForm(this.getBoolValue(FIELD_PROCESS_FORMS));
-        	spiderParam.setPostForm(this.getBoolValue(FIELD_POST_FORMS));
-        	spiderParam.setParseComments(this.getBoolValue(FIELD_PARSE_COMMENTS));
-        	spiderParam.setParseRobotsTxt(this.getBoolValue(FIELD_PARSE_ROBOTS));
-        	spiderParam.setParseSitemapXml(this.getBoolValue(FIELD_PARSE_SITEMAP));
-        	spiderParam.setParseSVNEntries(this.getBoolValue(FIELD_PARSE_SVN));
-        	spiderParam.setParseGit(this.getBoolValue(FIELD_PARSE_GIT));
-        	spiderParam.setHandleODataParametersVisited(this.getBoolValue(FIELD_HANDLE_ODATA));
+        	spiderParam.setMaxDepth(((ZapNumberSpinner)this.getField(FIELD_MAX_DEPTH)).getValue());
+        	spiderParam.setMaxDuration(((ZapNumberSpinner)this.getField(FIELD_MAX_DURATION)).getValue());
+        	spiderParam.setSendRefererHeader(((JCheckBox)getField(FIELD_SEND_REFERER)).isSelected());
+        	spiderParam.setProcessForm(((JCheckBox)getField(FIELD_PROCESS_FORMS)).isSelected());
+        	spiderParam.setPostForm(((JCheckBox)getField(FIELD_POST_FORMS)).isSelected());
+        	spiderParam.setParseComments(((JCheckBox)getField(FIELD_PARSE_COMMENTS)).isSelected());
+        	spiderParam.setParseRobotsTxt(((JCheckBox)getField(FIELD_PARSE_ROBOTS)).isSelected());
+        	spiderParam.setParseSitemapXml(((JCheckBox)getField(FIELD_PARSE_SITEMAP)).isSelected());
+        	spiderParam.setParseSVNEntries(((JCheckBox)getField(FIELD_PARSE_SVN)).isSelected());
+        	spiderParam.setParseGit(((JCheckBox)getField(FIELD_PARSE_GIT)).isSelected());
+        	spiderParam.setHandleODataParametersVisited(((JCheckBox)getField(FIELD_HANDLE_ODATA)).isSelected());
         	spiderParam.setThreadCount(extension.getSpiderParam().getThreadCount());
         	
-        	maxChildrenToCrawl = this.getIntValue(FIELD_MAX_CHILDREN);
+        	maxChildrenToCrawl = ((ZapNumberSpinner)this.getField(FIELD_MAX_CHILDREN)).getValue();
         	
         	contextSpecificObjects.add(spiderParam);
         	if (maxChildrenToCrawl > 0) {
@@ -359,7 +360,7 @@ public class SpiderDialog extends StandardFieldsDialog {
 		if (startUri != null) {
 			contextSpecificObjects.add(startUri);
 
-			if (getBoolValue(FIELD_SUBTREE_ONLY)) {
+			if (((JCheckBox)getField(FIELD_SUBTREE_ONLY)).isSelected()) {
 				contextSpecificObjects.add(new HttpPrefixFetchFilter(startUri));
 			}
 		}
@@ -370,15 +371,15 @@ public class SpiderDialog extends StandardFieldsDialog {
         }
         
         // Save the adv option permanently for next time
-        extension.getSpiderParam().setShowAdvancedDialog(this.getBoolValue(FIELD_ADVANCED));
+        extension.getSpiderParam().setShowAdvancedDialog(((JCheckBox)getField(FIELD_ADVANCED)).isSelected());
         
-        target.setRecurse(this.getBoolValue(FIELD_RECURSE));
+        target.setRecurse(((JCheckBox)getField(FIELD_RECURSE)).isSelected());
 
         if (target.getContext() == null && getSelectedContext() != null) {
             target.setContext(getSelectedContext());
         }
 
-        subtreeOnlyPreviousCheckedState = getBoolValue(FIELD_SUBTREE_ONLY);
+        subtreeOnlyPreviousCheckedState = ((JCheckBox)getField(FIELD_SUBTREE_ONLY)).isSelected();
 
         this.extension.startScan(
                 target,
@@ -439,7 +440,7 @@ public class SpiderDialog extends StandardFieldsDialog {
             }
         }
 
-        if (getBoolValue(FIELD_SUBTREE_ONLY) && noStartUri) {
+        if (((JCheckBox)getField(FIELD_SUBTREE_ONLY)).isSelected() && noStartUri) {
             return Constant.messages.getString("spider.custom.noStartSubtreeOnly.error");
         }
         

@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.utils.ZapTextField;
@@ -189,13 +189,13 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 		int modifiers = 0;
 		
 		if (keyCode != 0) {
-			if (this.getBoolValue(FIELD_CONTROL)) {
+			if (((JCheckBox)getField(FIELD_CONTROL)).isSelected()) {
 				modifiers |= InputEvent.CTRL_DOWN_MASK;
 			}
-			if (this.getBoolValue(FIELD_ALT)) {
+			if (((JCheckBox)getField(FIELD_ALT)).isSelected()) {
 				modifiers |= InputEvent.ALT_DOWN_MASK;
 			}
-			if (this.getBoolValue(FIELD_SHIFT)) {
+			if (((JCheckBox)getField(FIELD_SHIFT)).isSelected()) {
 				modifiers |= InputEvent.SHIFT_DOWN_MASK;
 			}
 			ks = KeyStroke.getKeyStroke(keyCode, modifiers, false);

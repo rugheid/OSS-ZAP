@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.MessageFormat;
 
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.parosproxy.paros.Constant;
@@ -34,6 +34,7 @@ import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.view.View;
 import org.zaproxy.zap.model.Context;
 import org.zaproxy.zap.utils.ZapTextField;
+import org.zaproxy.zap.view.widgets.ContextSelectComboBox;
 
 public class ContextExportDialog extends StandardFieldsDialog {
 
@@ -56,7 +57,7 @@ public class ContextExportDialog extends StandardFieldsDialog {
 		super.addFieldListener(CONTEXT_FIELD, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Context ctx = getContextValue(CONTEXT_FIELD);
+				Context ctx = ((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext();
 				if (ctx != null) {
 					String fileName = ctx.getName() + CONTEXT_EXT;
 					setFieldValue(FILE_FIELD, fileName);
@@ -76,7 +77,7 @@ public class ContextExportDialog extends StandardFieldsDialog {
 	@Override
 	public void save() {
 		try {
-			Model.getSingleton().getSession().exportContext(getContextValue(CONTEXT_FIELD), getSelectedFile());
+			Model.getSingleton().getSession().exportContext(((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext(), getSelectedFile());
 		} catch (ConfigurationException e) {
 			View.getSingleton().showWarningDialog(this, 
 					MessageFormat.format(Constant.messages.getString("context.import.error"), e.getMessage()));
@@ -86,12 +87,12 @@ public class ContextExportDialog extends StandardFieldsDialog {
 	@Override
 	public String validateFields() {
 		File f = this.getSelectedFile();
-		if (this.getContextValue(CONTEXT_FIELD) == null) {
+		if (((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext() == null) {
 			return Constant.messages.getString("context.import.error.nocontext");
 		}
 		if (f == null) {
 			return Constant.messages.getString("context.import.error.nofile");
-		} else if (f.exists() & ! this.getBoolValue(OVERWRITE_FIELD)) {
+		} else if (f.exists() & ! ((JCheckBox)getField(OVERWRITE_FIELD)).isSelected()) {
 			return Constant.messages.getString("context.import.error.exists");
 		} else if (! f.getParentFile().canWrite()) {
 			return Constant.messages.getString("context.import.error.noaccess");

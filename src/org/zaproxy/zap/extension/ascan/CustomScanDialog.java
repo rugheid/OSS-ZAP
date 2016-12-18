@@ -230,7 +230,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
             public void actionPerformed(ActionEvent e) {
                 // Save the adv option permanently for next time
 
-                setAdvancedOptions(getBoolValue(FIELD_ADVANCED));
+                setAdvancedOptions(((JCheckBox)getField(FIELD_ADVANCED)).isSelected());
             }
         });
 
@@ -609,7 +609,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     private void setFieldStates() {
         int userDefStart = getRequestField().getSelectionStart();
 
-        if (getBoolValue(FIELD_RECURSE)) {
+        if (((JCheckBox)this.getField(FIELD_RECURSE)).isSelected()) {
             // Dont support custom vectors when recursing
             customPanelStatus.setText(Constant.messages.getString("ascan.custom.status.recurse"));
             getAddCustomButton().setEnabled(false);
@@ -737,7 +737,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     public void save() {
         List<Object> contextSpecificObjects = new ArrayList<Object>();
 
-        if (!this.getBoolValue(FIELD_ADVANCED)) {
+        if (!((JCheckBox)this.getField(FIELD_ADVANCED)).isSelected()) {
             contextSpecificObjects.add(scanPolicy);
         } else {
             contextSpecificObjects.add(policyPanel.getScanPolicy());
@@ -762,7 +762,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
                 scannerParam.setTargetParamsEnabledRPC(0);                
             }
             
-            if (!getBoolValue(FIELD_RECURSE) && injectionPointModel.getSize() > 0) {
+            if (!((JCheckBox)this.getField(FIELD_RECURSE)).isSelected() && injectionPointModel.getSize() > 0) {
                 int[][] injPoints = new int[injectionPointModel.getSize()][];
                 for (int i = 0; i < injectionPointModel.getSize(); i++) {
                     Highlight hl = injectionPointModel.elementAt(i);
@@ -806,7 +806,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
             }
         }
 
-        target.setRecurse(this.getBoolValue(FIELD_RECURSE));
+        target.setRecurse(((JCheckBox)this.getField(FIELD_RECURSE)).isSelected());
 
         if (target.getContext() == null && getSelectedContext() != null) {
             target.setContext(getSelectedContext());
