@@ -865,33 +865,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		return "";
 	}
 
-	public void addContextSelectField(String fieldLabel, Context selectedContext){
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		ContextSelectComboBox field = new ContextSelectComboBox();
-		if (selectedContext != null) {
-			field.setSelectedItem(selectedContext);
-		}
-		this.addField(fieldLabel, field, field, 0.0D);
-	}
-	
-	public void addContextSelectField(int tabIndex, String fieldLabel, Context selectedContext){
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		ContextSelectComboBox field = new ContextSelectComboBox();
-		if (selectedContext != null) {
-			field.setSelectedItem(selectedContext);
-		}
-		
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
-		incTabOffset(tabIndex);
-	}
-	
 	public void addFileSelectField(String fieldLabel, final File dir, final int mode, final FileFilter filter) {
 		if (isTabbed()) {
 			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
