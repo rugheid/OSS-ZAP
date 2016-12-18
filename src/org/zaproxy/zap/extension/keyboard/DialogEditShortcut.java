@@ -32,6 +32,7 @@ import javax.swing.KeyStroke;
 
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
 
 public class DialogEditShortcut extends StandardFieldsDialog {
 
@@ -74,7 +75,7 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 			}};
 		
 		this.addReadOnlyField(FIELD_ACTION, shortcut.getName(), false);
-		this.addComboField(FIELD_KEY, getKeyList(), getKey(shortcut.getKeyStroke()));
+		this.addField(FIELD_KEY, StandardFieldsFactory.get().createComboField(getKeyList(), getKey(shortcut.getKeyStroke())));
 		this.addFieldListener(FIELD_KEY, listener);
 		this.addCheckBoxField(FIELD_CONTROL, this.isModifier(shortcut.getKeyStroke(), InputEvent.CTRL_DOWN_MASK));
 		this.addFieldListener(FIELD_CONTROL, listener);

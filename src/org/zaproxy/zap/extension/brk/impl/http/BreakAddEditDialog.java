@@ -64,8 +64,16 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 			this.setTitle(Constant.messages.getString("brk.brkpoint.edit.title"));
 		}
 
-		this.addComboField(FIELD_LOCATION, getLocations(), this.locToStr(breakpoint.getLocation()));
-		this.addComboField(FIELD_MATCH, getMatches(), this.matchToStr(breakpoint.getMatch()));
+		this.addField(FIELD_LOCATION,
+				StandardFieldsFactory.get().createComboField(
+						getLocations(),
+						this.locToStr(breakpoint.getLocation())
+				));
+		this.addField(FIELD_MATCH,
+				StandardFieldsFactory.get().createComboField(
+						getMatches(),
+						this.matchToStr(breakpoint.getMatch())
+				));
 		this.addField(FIELD_STRING, StandardFieldsFactory.get().createTextField(breakpoint.getString()));
 		this.addCheckBoxField(FIELD_INVERSE, breakpoint.isInverse());
 		this.addCheckBoxField(FIELD_IGNORECASE, breakpoint.isIgnoreCase());

@@ -27,6 +27,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -62,7 +63,6 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 	/**
 	 * Returns the name of the panel "Structure" for the given {@code contextIndex}.
 	 * 
-	 * @param contextIndex the context index that will be used to create the name of the panel
 	 * @return the name of the panel "Include in context" for the given {@code contextIndex}
 	 * @since 2.2.0
 	 * @see Context#getIndex()
@@ -370,11 +370,13 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 				ro = true;
 				this.addReadOnlyField(FIELD_NAME, getModVal(type), false);
 			} else {
-				this.addComboField(FIELD_TYPE, 
-						new String [] {
-							Constant.messages.getString(VALUE_TYPE_STRUCT), 
-							Constant.messages.getString(VALUE_TYPE_DATA)}, 
-							getModVal(type)); 
+				this.addField(FIELD_TYPE,
+						StandardFieldsFactory.get().createComboField(
+							Arrays.asList(
+								Constant.messages.getString(VALUE_TYPE_STRUCT),
+								Constant.messages.getString(VALUE_TYPE_DATA)),
+							getModVal(type)
+						));
 				this.addFieldListener(FIELD_TYPE, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {

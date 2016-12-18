@@ -36,7 +36,7 @@ public class SessionTableSelectDialog extends StandardFieldsDialog {
 		super(owner, "session.select.title", DisplayUtils.getScaledDimension(400,200));
 		//this.setModal(true);
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
-		this.addComboField(NAME_FIELD, sessions, null);
+		this.addField(NAME_FIELD, StandardFieldsFactory.get().createComboField(sessions, null));
 	}
 
 	@Override

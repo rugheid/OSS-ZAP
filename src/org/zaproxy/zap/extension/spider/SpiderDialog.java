@@ -46,6 +46,7 @@ import org.zaproxy.zap.spider.filters.MaxChildrenParseFilter;
 import org.zaproxy.zap.spider.filters.HttpPrefixFetchFilter;
 import org.zaproxy.zap.users.User;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
 
 public class SpiderDialog extends StandardFieldsDialog {
 
@@ -114,8 +115,12 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.removeAllFields();
 
         this.addTargetSelectField(0, FIELD_START, this.target, true, false);
-        this.addComboField(0, FIELD_CONTEXT, new String[] {}, "");
-        this.addComboField(0, FIELD_USER, new String[] {}, "");
+        this.addFieldInTab(FIELD_CONTEXT,
+                StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
+                0);
+        this.addFieldInTab(FIELD_USER,
+                StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
+                0);
         this.addCheckBoxField(0, FIELD_RECURSE, true);
         this.addCheckBoxField(0, FIELD_SUBTREE_ONLY, subtreeOnlyPreviousCheckedState);
         // This option is always read from the 'global' options

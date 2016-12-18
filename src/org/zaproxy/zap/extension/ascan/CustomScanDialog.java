@@ -77,6 +77,7 @@ import org.zaproxy.zap.users.User;
 import org.zaproxy.zap.utils.ZapTextArea;
 import org.zaproxy.zap.view.LayoutHelper;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
 import org.zaproxy.zap.view.TechnologyTreePanel;
 
 public class CustomScanDialog extends StandardFieldsDialog {
@@ -181,9 +182,17 @@ public class CustomScanDialog extends StandardFieldsDialog {
         }
 
         this.addTargetSelectField(0, FIELD_START, this.target, false, false);
-        this.addComboField(0, FIELD_POLICY, extension.getPolicyManager().getAllPolicyNames(), scanPolicy.getName());
-        this.addComboField(0, FIELD_CONTEXT, new String[]{}, "");
-        this.addComboField(0, FIELD_USER, new String[]{}, "");
+        this.addFieldInTab(FIELD_POLICY,
+                StandardFieldsFactory.get().createComboField(
+                        extension.getPolicyManager().getAllPolicyNames(),
+                        scanPolicy.getName()),
+                0);
+        this.addFieldInTab(FIELD_CONTEXT,
+                StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
+                0);
+        this.addFieldInTab(FIELD_USER,
+                StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
+                0);
         this.addCheckBoxField(0, FIELD_RECURSE, true);
         // This option is always read from the 'global' options
         this.addCheckBoxField(0, FIELD_ADVANCED, extension.getScannerParam().isShowAdvancedDialog());
