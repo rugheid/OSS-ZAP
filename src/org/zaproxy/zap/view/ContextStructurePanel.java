@@ -381,9 +381,9 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 						setFieldStates();						
 					}});
 			}
-			
-			this.addTextField(FIELD_NAME, name);
-			this.addTextField(FIELD_REGEX, regex);
+
+			this.addField(FIELD_NAME, StandardFieldsFactory.get().createTextField(name));
+			this.addField(FIELD_REGEX, StandardFieldsFactory.get().createTextField(regex));
 
 			setFieldStates();
 

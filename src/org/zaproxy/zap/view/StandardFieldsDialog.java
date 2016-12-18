@@ -459,6 +459,26 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		incTabOffset(tabIndex);
 	}
 
+	public void addField(String fieldLabel, Component field) {
+	    if (isTabbed()) {
+	    	throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
+		}
+		// TODO: Weighty should be different for some fields, we need to handle that!
+		this.addField(fieldLabel, field, field, 0.0D);
+	}
+
+	public void addFieldInTab(String fieldLabel, Component field, int tabIndex) {
+		if (!isTabbed()) {
+			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
+		}
+		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
+			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
+		}
+		// TODO: Weighty should be different for some fields, we need to handle that!
+		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
+		incTabOffset(tabIndex);
+	}
+
 	private void addField(JPanel panel, int indexy, String fieldLabel, Component field, Component wrapper, double weighty) {
 		if (this.fieldList.contains(field)) {
 			throw new IllegalArgumentException("Field already added: " + field);
@@ -484,33 +504,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
 		}
 		this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field, wrapper, weighty);
-	}
-
-	public void addTextField(String fieldLabel, String value) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		ZapTextField field = new ZapTextField();
-		if (value != null) {
-			field.setText(value);
-		}
-		this.addField(fieldLabel, field, field, 0.0D);
-	}
-
-	public void addTextField(int tabIndex, String fieldLabel, String value) {
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		ZapTextField field = new ZapTextField();
-		if (value != null) {
-			field.setText(value);
-		}
-
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
-		incTabOffset(tabIndex);
 	}
 
 	/**

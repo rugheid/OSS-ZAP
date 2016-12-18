@@ -42,7 +42,7 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 
 	public ContextCreateDialog(Frame owner) {
 		super(owner, "context.create.title", DisplayUtils.getScaledDimension(400,300));
-		this.addTextField(NAME_FIELD, null);
+		this.addField(NAME_FIELD, StandardFieldsFactory.get().createTextField(null));
 		this.addNodeSelectField(TOP_NODE, null, false, false);
 		this.addMultilineField(DESC_FIELD, "");
 		this.addCheckBoxField(IN_SCOPE_FIELD, true);

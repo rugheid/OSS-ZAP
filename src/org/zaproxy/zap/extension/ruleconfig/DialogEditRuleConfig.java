@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.utils.ZapTextArea;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
 
 public class DialogEditRuleConfig extends StandardFieldsDialog {
 
@@ -55,7 +56,7 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
         
         this.addReadOnlyField(FIELD_KEY, rc.getKey(), false);
         this.addReadOnlyField(FIELD_DEFAULT, rc.getDefaultValue(), false);
-        this.addTextField(FIELD_VALUE, rc.getValue());
+        this.addField(FIELD_VALUE, StandardFieldsFactory.get().createTextField(rc.getValue()));
         String desc = "";
         if (Constant.messages.containsKey(rc.getKey())) {
             desc = Constant.messages.getString(rc.getKey());

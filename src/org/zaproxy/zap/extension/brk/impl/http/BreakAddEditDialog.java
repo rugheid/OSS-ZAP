@@ -29,6 +29,7 @@ import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Location;
 import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Match;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
 
 public class BreakAddEditDialog extends StandardFieldsDialog {
 
@@ -65,7 +66,7 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 
 		this.addComboField(FIELD_LOCATION, getLocations(), this.locToStr(breakpoint.getLocation()));
 		this.addComboField(FIELD_MATCH, getMatches(), this.matchToStr(breakpoint.getMatch()));
-		this.addTextField(FIELD_STRING, breakpoint.getString());
+		this.addField(FIELD_STRING, StandardFieldsFactory.get().createTextField(breakpoint.getString()));
 		this.addCheckBoxField(FIELD_INVERSE, breakpoint.isInverse());
 		this.addCheckBoxField(FIELD_IGNORECASE, breakpoint.isIgnoreCase());
 
