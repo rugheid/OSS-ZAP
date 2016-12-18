@@ -121,10 +121,10 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.addFieldInTab(FIELD_USER,
                 StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
                 0);
-        this.addCheckBoxField(0, FIELD_RECURSE, true);
-        this.addCheckBoxField(0, FIELD_SUBTREE_ONLY, subtreeOnlyPreviousCheckedState);
+        this.addFieldInTab(FIELD_RECURSE, StandardFieldsFactory.get().createCheckBoxField(true), 0);
+        this.addFieldInTab(FIELD_SUBTREE_ONLY, StandardFieldsFactory.get().createCheckBoxField(subtreeOnlyPreviousCheckedState), 0);
         // This option is always read from the 'global' options
-        this.addCheckBoxField(0, FIELD_ADVANCED, getSpiderParam().isShowAdvancedDialog());
+        this.addFieldInTab(FIELD_ADVANCED, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isShowAdvancedDialog()), 0);
         this.addPadding(0);
 
         // Advanced options
@@ -146,15 +146,15 @@ public class SpiderDialog extends StandardFieldsDialog {
                         Integer.MAX_VALUE,
                         maxDuration),
                 1);
-        this.addCheckBoxField(1, FIELD_SEND_REFERER, getSpiderParam().isSendRefererHeader());
-        this.addCheckBoxField(1, FIELD_PROCESS_FORMS, getSpiderParam().isProcessForm());
-        this.addCheckBoxField(1, FIELD_POST_FORMS, getSpiderParam().isPostForm());
-        this.addCheckBoxField(1, FIELD_PARSE_COMMENTS, getSpiderParam().isParseComments());
-        this.addCheckBoxField(1, FIELD_PARSE_ROBOTS, getSpiderParam().isParseRobotsTxt());
-        this.addCheckBoxField(1, FIELD_PARSE_SITEMAP, getSpiderParam().isParseSitemapXml());
-        this.addCheckBoxField(1, FIELD_PARSE_SVN, getSpiderParam().isParseSVNEntries());
-        this.addCheckBoxField(1, FIELD_PARSE_GIT, getSpiderParam().isParseGit());
-        this.addCheckBoxField(1, FIELD_HANDLE_ODATA, getSpiderParam().isHandleODataParametersVisited());
+        this.addFieldInTab(FIELD_SEND_REFERER, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isSendRefererHeader()), 1);
+        this.addFieldInTab(FIELD_PROCESS_FORMS, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isProcessForm()), 1);
+        this.addFieldInTab(FIELD_POST_FORMS, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isPostForm()), 1);
+        this.addFieldInTab(FIELD_PARSE_COMMENTS, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isParseComments()), 1);
+        this.addFieldInTab(FIELD_PARSE_ROBOTS, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isParseRobotsTxt()), 1);
+        this.addFieldInTab(FIELD_PARSE_SITEMAP, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isParseSitemapXml()), 1);
+        this.addFieldInTab(FIELD_PARSE_SVN, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isParseSVNEntries()), 1);
+        this.addFieldInTab(FIELD_PARSE_GIT, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isParseGit()), 1);
+        this.addFieldInTab(FIELD_HANDLE_ODATA, StandardFieldsFactory.get().createCheckBoxField(getSpiderParam().isHandleODataParametersVisited()), 1);
         this.addPadding(1);
 
     	if (! getBoolValue(FIELD_PROCESS_FORMS)) {

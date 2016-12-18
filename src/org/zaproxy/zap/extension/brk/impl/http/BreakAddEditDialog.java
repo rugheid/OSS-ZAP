@@ -75,8 +75,8 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 						this.matchToStr(breakpoint.getMatch())
 				));
 		this.addField(FIELD_STRING, StandardFieldsFactory.get().createTextField(breakpoint.getString()));
-		this.addCheckBoxField(FIELD_INVERSE, breakpoint.isInverse());
-		this.addCheckBoxField(FIELD_IGNORECASE, breakpoint.isIgnoreCase());
+		this.addField(FIELD_INVERSE, StandardFieldsFactory.get().createCheckBoxField(breakpoint.isInverse()));
+		this.addField(FIELD_INVERSE, StandardFieldsFactory.get().createCheckBoxField(breakpoint.isIgnoreCase()));
 
 		this.addPadding();
 	}

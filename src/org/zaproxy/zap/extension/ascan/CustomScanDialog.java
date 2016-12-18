@@ -193,9 +193,9 @@ public class CustomScanDialog extends StandardFieldsDialog {
         this.addFieldInTab(FIELD_USER,
                 StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
                 0);
-        this.addCheckBoxField(0, FIELD_RECURSE, true);
+        this.addFieldInTab(FIELD_RECURSE, StandardFieldsFactory.get().createCheckBoxField(true), 0);
         // This option is always read from the 'global' options
-        this.addCheckBoxField(0, FIELD_ADVANCED, extension.getScannerParam().isShowAdvancedDialog());
+        this.addFieldInTab(FIELD_ADVANCED, StandardFieldsFactory.get().createCheckBoxField(true), 0);
 
         this.addFieldListener(FIELD_POLICY, new ActionListener() {
             @Override

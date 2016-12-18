@@ -689,28 +689,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		}
 	}
 	
-	public void addCheckBoxField(String fieldLabel, boolean value) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		JCheckBox field = new JCheckBox();
-		field.setSelected(value);
-		this.addField(fieldLabel, field, field, 0.0D);
-	}
-
-	public void addCheckBoxField(int tabIndex, String fieldLabel, boolean value) {
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		JCheckBox field = new JCheckBox();
-		field.setSelected(value);
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
-		this.incTabOffset(tabIndex);
-	}
-
 	/*
 	 * Add a 'node select' field which provides a button for showing a Node Select Dialog and a 
 	 * non editable field for showing the node selected

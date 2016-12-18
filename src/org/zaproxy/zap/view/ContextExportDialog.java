@@ -50,7 +50,7 @@ public class ContextExportDialog extends StandardFieldsDialog {
 		this.addContextSelectField(CONTEXT_FIELD, null);
 		this.addFileSelectField(DIR_FIELD, Constant.getContextsDir(), JFileChooser.DIRECTORIES_ONLY, null);
 		this.addField(FILE_FIELD, StandardFieldsFactory.get().createTextField(null));
-		this.addCheckBoxField(OVERWRITE_FIELD, false);
+		this.addField(OVERWRITE_FIELD, StandardFieldsFactory.get().createCheckBoxField(false));
 		
 		super.addFieldListener(CONTEXT_FIELD, new ActionListener() {
 			@Override
