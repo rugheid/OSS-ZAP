@@ -28,6 +28,7 @@ import org.parosproxy.paros.model.SiteNode;
 import org.zaproxy.zap.model.Context;
 import org.zaproxy.zap.model.StructuralSiteNode;
 import org.zaproxy.zap.utils.DisplayUtils;
+import org.zaproxy.zap.utils.ZapTextField;
 
 public class ContextCreateDialog extends StandardFieldsDialog {
 
@@ -59,8 +60,10 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 
 	@Override
 	public void save() {
-		Context ctx = Model.getSingleton().getSession().getNewContext(this.getStringValue(NAME_FIELD));
-		ctx.setDescription(this.getStringValue(DESC_FIELD));
+	    String nameValue = ((ZapTextField)this.getField(NAME_FIELD)).getText();
+		Context ctx = Model.getSingleton().getSession().getNewContext(nameValue);
+        String descValue = ((ZapTextField)this.getField(DESC_FIELD)).getText();
+		ctx.setDescription(descValue);
 		ctx.setInScope(this.getBoolValue(IN_SCOPE_FIELD));
 		if (topNode != null) {
 	        try {

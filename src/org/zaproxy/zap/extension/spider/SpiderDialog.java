@@ -45,6 +45,7 @@ import org.zaproxy.zap.spider.filters.MaxChildrenFetchFilter;
 import org.zaproxy.zap.spider.filters.MaxChildrenParseFilter;
 import org.zaproxy.zap.spider.filters.HttpPrefixFetchFilter;
 import org.zaproxy.zap.users.User;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
 
@@ -243,7 +244,7 @@ public class SpiderDialog extends StandardFieldsDialog {
     }
     
     private Context getSelectedContext() {
-    	String ctxName = this.getStringValue(FIELD_CONTEXT);
+    	String ctxName = ((ZapTextField)this.getField(FIELD_CONTEXT)).getText();
     	if (this.extUserMgmt != null && ! this.isEmptyField(FIELD_CONTEXT)) {
             Session session = Model.getSingleton().getSession();
             return session.getContext(ctxName);
@@ -254,7 +255,7 @@ public class SpiderDialog extends StandardFieldsDialog {
     private User getSelectedUser() {
     	Context context = this.getSelectedContext();
     	if (context != null) {
-        	String userName = this.getStringValue(FIELD_USER);
+        	String userName = ((ZapTextField)this.getField(FIELD_USER)).getText();
         	List<User> users = this.extUserMgmt.getContextUserAuthManager(context.getIndex()).getUsers();
         	for (User user : users) {
         		if (userName.equals(user.getName())) {
@@ -318,7 +319,7 @@ public class SpiderDialog extends StandardFieldsDialog {
         try {
         	// Always include the startUri, this has the side effect
         	// of handling URLs that have not been accessed
-			startUri = new URI(this.getStringValue(FIELD_START), true);
+			startUri = new URI(((ZapTextField)this.getField(FIELD_START)).getText(), true);
 		} catch (Exception e1) {
 			// Ignore - will have been checked in validateParams
 		}
@@ -363,7 +364,7 @@ public class SpiderDialog extends StandardFieldsDialog {
 			}
 		}
         
-        if (target == null || ! this.getStringValue(FIELD_START).equals(getTargetText(target))) {
+        if (target == null || ! ((ZapTextField)this.getField(FIELD_START)).getText().equals(getTargetText(target))) {
        		// Clear the target as it doesnt match the value entered manually
 			target = new Target((StructuralNode)null);
         }
@@ -397,8 +398,8 @@ public class SpiderDialog extends StandardFieldsDialog {
     	}
 
     	boolean noStartUri = true;
-		if (!getStringValue(FIELD_START).equals(getTargetText(target))) {
-			String url = this.getStringValue(FIELD_START);
+		if (!((ZapTextField)this.getField(FIELD_START)).getText().equals(getTargetText(target))) {
+			String url = ((ZapTextField)this.getField(FIELD_START)).getText();
 			try {
 				// Need both constructors as they catch slightly different issues ;)
 				new URI(url, true);

@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Location;
 import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Match;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
 
@@ -126,9 +127,9 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 	public void save() {
 		HttpBreakpointMessage brk = 
 				new HttpBreakpointMessage(
-						this.getStringValue(FIELD_STRING), 
-						this.strToLoc(this.getStringValue(FIELD_LOCATION)), 
-						this.strToMatch(this.getStringValue(FIELD_MATCH)), 
+						((ZapTextField)this.getField(FIELD_STRING)).getText(),
+						this.strToLoc(((ZapTextField)this.getField(FIELD_LOCATION)).getText()),
+						this.strToMatch(((ZapTextField)this.getField(FIELD_MATCH)).getText()),
 						this.getBoolValue(FIELD_INVERSE),
 						this.getBoolValue(FIELD_IGNORECASE));
 		
@@ -147,9 +148,9 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 		if (this.isEmptyField(FIELD_STRING)) {
 			return Constant.messages.getString("brk.brkpoint.error.nostr"); 
 		}
-		if (Match.regex.equals(this.strToMatch(this.getStringValue(FIELD_MATCH)))) {
+		if (Match.regex.equals(this.strToMatch(((ZapTextField)this.getField(FIELD_MATCH)).getText()))) {
 			try {
-				Pattern.compile(this.getStringValue(FIELD_STRING));
+				Pattern.compile(((ZapTextField)this.getField(FIELD_STRING)).getText());
 			} catch (Exception e) {
 				return Constant.messages.getString("brk.brkpoint.error.regex"); 
 			}

@@ -24,10 +24,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.utils.ZapTextArea;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
 
@@ -88,8 +89,8 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
 
     @Override
     public void save() {
-        if (! this.getStringValue(FIELD_VALUE).equals(this.rc.getValue())) {
-            this.model.setRuleConfigValue (rc.getKey(), this.getStringValue(FIELD_VALUE));
+        if (! ((ZapTextField)this.getField(FIELD_VALUE)).getText().equals(this.rc.getValue())) {
+            this.model.setRuleConfigValue (rc.getKey(), ((ZapTextField)this.getField(FIELD_VALUE)).getText());
         }
     }
 

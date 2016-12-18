@@ -980,22 +980,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		return this.fieldMap.get(fieldLabel);
 	}
 
-	public String getStringValue(String fieldLabel) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ZapTextField) {
-				return ((ZapTextField)c).getText();
-			} else if (c instanceof ZapTextArea) {
-				return ((ZapTextArea)c).getText();
-			} else if (c instanceof JComboBox) {
-				return (String)((JComboBox<?>)c).getSelectedItem();
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * Gets the contents of a {@link JPasswordField} field.
 	 * <p>

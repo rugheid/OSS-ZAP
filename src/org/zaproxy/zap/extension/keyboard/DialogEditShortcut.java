@@ -31,6 +31,7 @@ import java.util.List;
 import javax.swing.KeyStroke;
 
 import org.parosproxy.paros.Constant;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
 
@@ -172,7 +173,7 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 	}
 	
 	private char selectedKey() {
-		return KeyboardMapping.keyCode(this.getStringValue(FIELD_KEY));
+		return KeyboardMapping.keyCode(((ZapTextField)this.getField(FIELD_KEY)).getText());
 	}
 	
 	private boolean isModifier(KeyStroke ks, int modifier) {

@@ -23,6 +23,7 @@ import java.awt.Frame;
 import java.util.List;
 
 import org.zaproxy.zap.utils.DisplayUtils;
+import org.zaproxy.zap.utils.ZapTextField;
 
 public class SessionTableSelectDialog extends StandardFieldsDialog {
 
@@ -41,7 +42,7 @@ public class SessionTableSelectDialog extends StandardFieldsDialog {
 
 	@Override
 	public void save() {
-		this.selectedSession = this.getStringValue(NAME_FIELD);
+		this.selectedSession = ((ZapTextField)this.getField(NAME_FIELD)).getText();
 	}
 
 	public String getSelectedSession() {

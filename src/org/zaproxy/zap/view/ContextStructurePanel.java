@@ -397,7 +397,7 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 		private void setFieldStates() {
 			if (! ro) {
 				if (Constant.messages.getString(VALUE_TYPE_STRUCT).equals(
-						this.getStringValue(FIELD_TYPE))) {
+                        ((ZapTextField)this.getField(FIELD_TYPE)).getText())) {
 					type = StructuralNodeModifier.Type.StructuralParameter;
 				} else {
 					type = StructuralNodeModifier.Type.DataDrivenNode;
@@ -419,13 +419,13 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 		public void save() {
 			ddn = new StructuralNodeModifier(
 					type,
-					Pattern.compile(this.getStringValue(FIELD_REGEX)), 
-					this.getStringValue(FIELD_NAME));
+					Pattern.compile(((ZapTextField)this.getField(FIELD_REGEX)).getText()),
+					((ZapTextField)this.getField(FIELD_NAME)).getText());
 		}
 
 		@Override
 		public String validateFields() {
-			if (! this.getStringValue(FIELD_NAME).matches("[A-Za-z0-9]+")) {
+			if (! ((ZapTextField)this.getField(FIELD_NAME)).getText().matches("[A-Za-z0-9]+")) {
 				// Must supply a name just made up of alphanumeric characters
 				return Constant.messages.getString("context.ddn.dialog.error.name");
 			}
@@ -434,12 +434,12 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 				if (this.isEmptyField(FIELD_REGEX)) {
 					return Constant.messages.getString("context.ddn.dialog.error.regex");
 				}
-				if (! this.getStringValue(FIELD_REGEX).matches(".*\\(.*\\).*\\(.*\\).*")) {
+				if (! ((ZapTextField)this.getField(FIELD_REGEX)).getText().matches(".*\\(.*\\).*\\(.*\\).*")) {
 					// We need at least 2 groups
 					return Constant.messages.getString("context.ddn.dialog.error.regex");
 				}
 				try {
-					Pattern.compile(this.getStringValue(FIELD_REGEX));
+					Pattern.compile(((ZapTextField)this.getField(FIELD_REGEX)).getText());
 				} catch (Exception e) {
 					// Not a valid regex expression
 					return Constant.messages.getString("context.ddn.dialog.error.regex");

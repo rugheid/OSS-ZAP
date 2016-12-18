@@ -75,6 +75,7 @@ import org.zaproxy.zap.model.StructuralSiteNode;
 import org.zaproxy.zap.model.Target;
 import org.zaproxy.zap.users.User;
 import org.zaproxy.zap.utils.ZapTextArea;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.LayoutHelper;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
@@ -275,7 +276,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     }
 
     private void policySelected() {
-        String policyName = getStringValue(FIELD_POLICY);
+        String policyName = ((ZapTextField)this.getField(FIELD_POLICY)).getText();
         try {
             scanPolicy = extension.getPolicyManager().getPolicy(policyName);
             policyPanel.setScanPolicy(scanPolicy);
@@ -376,7 +377,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     }
 
     private Context getSelectedContext() {
-        String ctxName = this.getStringValue(FIELD_CONTEXT);
+        String ctxName = ((ZapTextField)this.getField(FIELD_CONTEXT)).getText();
         if (this.extUserMgmt != null && !this.isEmptyField(FIELD_CONTEXT)) {
             Session session = Model.getSingleton().getSession();
             return session.getContext(ctxName);
@@ -387,7 +388,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     private User getSelectedUser() {
         Context context = this.getSelectedContext();
         if (context != null) {
-            String userName = this.getStringValue(FIELD_USER);
+            String userName = ((ZapTextField)this.getField(FIELD_USER)).getText();
             List<User> users = this.extUserMgmt.getContextUserAuthManager(context.getIndex()).getUsers();
             for (User user : users) {
                 if (userName.equals(user.getName())) {

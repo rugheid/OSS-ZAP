@@ -33,6 +33,7 @@ import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.view.View;
 import org.zaproxy.zap.model.Context;
+import org.zaproxy.zap.utils.ZapTextField;
 
 public class ContextExportDialog extends StandardFieldsDialog {
 
@@ -67,7 +68,9 @@ public class ContextExportDialog extends StandardFieldsDialog {
 		if (this.isEmptyField(DIR_FIELD) || this.isEmptyField(FILE_FIELD)) {
 			return null;
 		}
-		return new File (this.getStringValue(DIR_FIELD), this.getStringValue(FILE_FIELD));
+		String dirValue = ((ZapTextField)this.getField(DIR_FIELD)).getText();
+		String fileValue = ((ZapTextField)this.getField(FILE_FIELD)).getText();
+		return new File (dirValue, fileValue);
 	}
 
 	@Override
