@@ -689,26 +689,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		}
 	}
 	
-	public void addNumberField(String fieldLabel, Integer min, Integer max, int value) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		ZapNumberSpinner field = new ZapNumberSpinner(min, value, max);
-		this.addField(fieldLabel, field, field, 0.0D);
-	}
-	
-	public void addNumberField(int tabIndex, String fieldLabel, Integer min, Integer max, int value) {
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		ZapNumberSpinner field = new ZapNumberSpinner(min, value, max);
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
-		this.incTabOffset(tabIndex);
-	}
-	
 	public void addCheckBoxField(String fieldLabel, boolean value) {
 		if (isTabbed()) {
 			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");

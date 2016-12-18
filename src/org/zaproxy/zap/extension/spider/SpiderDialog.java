@@ -128,9 +128,24 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.addPadding(0);
 
         // Advanced options
-        this.addNumberField(1, FIELD_MAX_DEPTH, 1, 19, getSpiderParam().getMaxDepth());
-        this.addNumberField(1, FIELD_MAX_CHILDREN, 0, Integer.MAX_VALUE, maxChildrenToCrawl);
-        this.addNumberField(1, FIELD_MAX_DURATION, 0, Integer.MAX_VALUE, maxDuration);
+        this.addFieldInTab(FIELD_MAX_DEPTH,
+                StandardFieldsFactory.get().createNumberField(
+                        1,
+                        19,
+                        getSpiderParam().getMaxDepth()),
+                1);
+        this.addFieldInTab(FIELD_MAX_CHILDREN,
+                StandardFieldsFactory.get().createNumberField(
+                        0,
+                        Integer.MAX_VALUE,
+                        maxChildrenToCrawl),
+                1);
+        this.addFieldInTab(FIELD_MAX_DURATION,
+                StandardFieldsFactory.get().createNumberField(
+                        0,
+                        Integer.MAX_VALUE,
+                        maxDuration),
+                1);
         this.addCheckBoxField(1, FIELD_SEND_REFERER, getSpiderParam().isSendRefererHeader());
         this.addCheckBoxField(1, FIELD_PROCESS_FORMS, getSpiderParam().isProcessForm());
         this.addCheckBoxField(1, FIELD_POST_FORMS, getSpiderParam().isPostForm());
