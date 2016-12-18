@@ -66,14 +66,6 @@ public class StandardFieldsFactory {
         return field;
     }
 
-    public JComboBox<String> createComboField(List<String> choices, String value) {
-        return this.createComboField(choices, value, false);
-    }
-
-    public JComboBox<String> createComboField(List<String> choices, String value, boolean editable) {
-        return this.createComboField((String[])choices.toArray(), value, editable);
-    }
-
     public JComboBox<Integer> createComboField(int[] choices, int value) {
         JComboBox<Integer> field = new JComboBox<>();
         for (int label : choices) {

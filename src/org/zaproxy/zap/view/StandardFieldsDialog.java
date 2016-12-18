@@ -459,12 +459,27 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		incTabOffset(tabIndex);
 	}
 
+	private boolean shouldBeInScrollPane(Component field) {
+		if (field instanceof ZapTextArea) {
+			return true;
+		}
+		return false;
+	}
+
 	public void addField(String fieldLabel, Component field) {
 	    if (isTabbed()) {
 	    	throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
 		}
-		// TODO: Weighty should be different for some fields, we need to handle that!
-		this.addField(fieldLabel, field, field, 0.0D);
+		double weighty = 0.0D;
+	    Component wrapper = field;
+		if (shouldBeInScrollPane(field)) {
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setViewportView(field);
+			wrapper = scrollPane;
+			weighty = 1.0D;
+		}
+		this.addField(fieldLabel, field, wrapper, weighty);
 	}
 
 	public void addFieldInTab(String fieldLabel, Component field, int tabIndex) {
@@ -474,8 +489,18 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
 			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
 		}
-		// TODO: Weighty should be different for some fields, we need to handle that!
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
+		// TODO: This code is duplicated and should be moved to the private addField method, therefore the wrapper parameter should be removed.
+		// This will inflict other methods, so should be done carefully!!!
+		double weighty = 0.0D;
+		Component wrapper = field;
+		if (shouldBeInScrollPane(field)) {
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setViewportView(field);
+			wrapper = scrollPane;
+			weighty = 1.0D;
+		}
+		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, wrapper, weighty);
 		incTabOffset(tabIndex);
 	}
 
@@ -504,90 +529,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
 		}
 		this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field, wrapper, weighty);
-	}
-
-	/**
-	 * Adds a {@link JPasswordField} field, with the given label and, optionally, the given value.
-	 *
-	 * @param fieldLabel the label of the field
-	 * @param value the value of the field, might be {@code null}
-	 * @throws IllegalArgumentException if the dialogue is a tabbed dialogue
-	 * @since TODO add version
-	 * @see #addPasswordField(int, String, String)
-	 * @see #getPasswordValue(String)
-	 */
-	public void addPasswordField(String fieldLabel, String value) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		JPasswordField field = new JPasswordField();
-		if (value != null) {
-			field.setText(value);
-		}
-		this.addField(fieldLabel, field, field, 0.0D);
-	}
-
-	/**
-	 * Adds a {@link JPasswordField} field to the tab with the given index, with the given label and, optionally, the given
-	 * value.
-	 *
-	 * @param tabIndex the index of the tab
-	 * @param fieldLabel the label of the field
-	 * @param value the value of the field, might be {@code null}
-	 * @throws IllegalArgumentException if the dialogue is not a tabbed dialogue or if the index does not correspond to an
-	 *			 existing tab
-	 * @since TODO add version
-	 * @see #addPasswordField(String, String)
-	 * @see #getPasswordValue(String)
-	 */
-	public void addPasswordField(int tabIndex, String fieldLabel, String value) {
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		JPasswordField field = new JPasswordField();
-		if (value != null) {
-			field.setText(value);
-		}
-
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, field, 0.0D);
-		incTabOffset(tabIndex);
-	}
-
-	public void addMultilineField(String fieldLabel, String value) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		ZapTextArea field = new ZapTextArea();
-		field.setLineWrap(true);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setViewportView(field);
-		if (value != null) {
-			field.setText(value);
-		}
-		this.addField(fieldLabel, field, scrollPane, 1.0D);
-	}
-
-	public void addMultilineField(int tabIndex, String fieldLabel, String value) {
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		ZapTextArea field = new ZapTextArea();
-		field.setLineWrap(true);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setViewportView(field);
-		if (value != null) {
-			field.setText(value);
-		}
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, scrollPane, 1.0D);
-		this.incTabOffset(tabIndex);
 	}
 
 	public void addComboField(String fieldLabel, String[] choices, String value) {

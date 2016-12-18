@@ -61,7 +61,7 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
         if (Constant.messages.containsKey(rc.getKey())) {
             desc = Constant.messages.getString(rc.getKey());
         }
-        this.addMultilineField(FIELD_DESC, desc);
+        this.addField(FIELD_DESC, StandardFieldsFactory.get().createMultilineField(desc));
         ZapTextArea descField = (ZapTextArea)this.getField(FIELD_DESC);
         descField.setEditable(false);
         descField.setWrapStyleWord(true);
