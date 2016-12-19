@@ -54,7 +54,7 @@ public class ContextExportDialog extends StandardFieldsDialog {
 		this.addField(FILE_FIELD, StandardFieldsFactory.get().createTextField(null));
 		this.addField(OVERWRITE_FIELD, StandardFieldsFactory.get().createCheckBoxField(false));
 		
-		super.addFieldListener(CONTEXT_FIELD, new ActionListener() {
+		StandardFieldsUtils.addFieldListener(this.getField(CONTEXT_FIELD), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Context ctx = ((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext();

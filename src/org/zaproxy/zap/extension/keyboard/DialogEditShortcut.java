@@ -34,6 +34,7 @@ import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
 
 public class DialogEditShortcut extends StandardFieldsDialog {
 
@@ -77,19 +78,19 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 		
 		this.addReadOnlyField(FIELD_ACTION, shortcut.getName(), false);
 		this.addField(FIELD_KEY, StandardFieldsFactory.get().createComboField(getKeyList(), getKey(shortcut.getKeyStroke())));
-		this.addFieldListener(FIELD_KEY, listener);
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_KEY), listener);
 		this.addField(FIELD_CONTROL, StandardFieldsFactory.get().createCheckBoxField(
 				this.isModifier(shortcut.getKeyStroke(), InputEvent.CTRL_DOWN_MASK)
 		));
-		this.addFieldListener(FIELD_CONTROL, listener);
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_CONTROL), listener);
 		this.addField(FIELD_ALT, StandardFieldsFactory.get().createCheckBoxField(
 				this.isModifier(shortcut.getKeyStroke(), InputEvent.ALT_DOWN_MASK)
 		));
-		this.addFieldListener(FIELD_ALT, listener);
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_ALT), listener);
 		this.addField(FIELD_SHIFT, StandardFieldsFactory.get().createCheckBoxField(
 				this.isModifier(shortcut.getKeyStroke(), InputEvent.SHIFT_DOWN_MASK)
 		));
-		this.addFieldListener(FIELD_SHIFT, listener);
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_SHIFT), listener);
 		this.addReadOnlyField(FIELD_INFO, "", true);
 		
 		this.getField(FIELD_INFO).setForeground(Color.RED);

@@ -165,13 +165,13 @@ public class SpiderDialog extends StandardFieldsDialog {
         	getField(FIELD_POST_FORMS).setEnabled(false);
     	}
 
-        this.addFieldListener(FIELD_CONTEXT, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_CONTEXT), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setUsers();
             }
         });
-        this.addFieldListener(FIELD_PROCESS_FORMS, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_PROCESS_FORMS), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	if (((JCheckBox)getField(FIELD_PROCESS_FORMS)).isSelected()) {
@@ -182,7 +182,7 @@ public class SpiderDialog extends StandardFieldsDialog {
             	}
             }
         });
-        this.addFieldListener(FIELD_ADVANCED, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_ADVANCED), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setAdvancedTabs(((JCheckBox)getField(FIELD_ADVANCED)).isSelected());
@@ -366,7 +366,7 @@ public class SpiderDialog extends StandardFieldsDialog {
 			}
 		}
         
-        if (target == null || ! ((ZapTextField)this.getField(FIELD_START)).getText().equals(getTargetText(target))) {
+        if (target == null || ! ((ZapTextField)this.getField(FIELD_START)).getText().equals(StandardFieldsUtils.getTargetText(target))) {
        		// Clear the target as it doesnt match the value entered manually
 			target = new Target((StructuralNode)null);
         }
@@ -400,7 +400,7 @@ public class SpiderDialog extends StandardFieldsDialog {
     	}
 
     	boolean noStartUri = true;
-		if (!((ZapTextField)this.getField(FIELD_START)).getText().equals(getTargetText(target))) {
+		if (!((ZapTextField)this.getField(FIELD_START)).getText().equals(StandardFieldsUtils.getTargetText(target))) {
 			String url = ((ZapTextField)this.getField(FIELD_START)).getText();
 			try {
 				// Need both constructors as they catch slightly different issues ;)

@@ -186,28 +186,23 @@ public class CustomScanDialog extends StandardFieldsDialog {
                         scanPolicy.getName()),
                 0);
         this.addFieldInTab(FIELD_CONTEXT,
-                StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
+                StandardFieldsFactory.get().createComboField(new ArrayList<>(), ""),
                 0);
         this.addFieldInTab(FIELD_USER,
-                StandardFieldsFactory.get().createComboField(new ArrayList<String>(), ""),
+                StandardFieldsFactory.get().createComboField(new ArrayList<>(), ""),
                 0);
         this.addFieldInTab(FIELD_RECURSE, StandardFieldsFactory.get().createCheckBoxField(true), 0);
         // This option is always read from the 'global' options
         this.addFieldInTab(FIELD_ADVANCED, StandardFieldsFactory.get().createCheckBoxField(true), 0);
 
-        this.addFieldListener(FIELD_POLICY, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                policySelected();
-            }
-        });
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_POLICY), e -> policySelected());
 
         this.addPadding(0);
 
         // Default to Recurse, so always set the warning
         customPanelStatus.setText(Constant.messages.getString("ascan.custom.status.recurse"));
 
-        this.addFieldListener(FIELD_CONTEXT, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_CONTEXT), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setUsers();
@@ -215,14 +210,14 @@ public class CustomScanDialog extends StandardFieldsDialog {
             }
         });
         
-        this.addFieldListener(FIELD_RECURSE, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_RECURSE), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFieldStates();
             }
         });
         
-        this.addFieldListener(FIELD_ADVANCED, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_ADVANCED), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Save the adv option permanently for next time

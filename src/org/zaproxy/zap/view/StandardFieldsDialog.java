@@ -661,7 +661,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		final ZapTextField text = new ZapTextField();
 		text.setEditable(editable);
 		if (value != null) {
-			text.setText(getNodeText(value));
+			text.setText(StandardFieldsUtils.getNodeText(value));
 		}
 		JButton selectButton = new JButton(Constant.messages.getString("all.button.select"));
 		selectButton.setIcon(new ImageIcon(View.class.getResource("/resource/icon/16/094.png"))); // Globe icon
@@ -674,7 +674,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 				nsd.setAllowRoot(allowRoot);
 				SiteNode node = nsd.showDialog(this.node);
 				if (node != null) {
-					text.setText(getNodeText(node));
+					text.setText(StandardFieldsUtils.getNodeText(node));
 					this.node = node;
 					siteNodeSelected(fieldLabel, node);
 				}
@@ -688,7 +688,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		this.addField(fieldLabel, text, panel, 0.0D);
 	}
 	
-
 	/*
 	 * Add a 'node select' field which provides a button for showing a Node Select Dialog and a 
 	 * non editable field for showing the node selected
@@ -704,7 +703,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		final ZapTextField text = new ZapTextField();
 		text.setEditable(editable);
 		if (value != null) {
-			text.setText(getNodeText(value));
+			text.setText(StandardFieldsUtils.getNodeText(value));
 		}
 		JButton selectButton = new JButton(Constant.messages.getString("all.button.select"));
 		selectButton.setIcon(new ImageIcon(View.class.getResource("/resource/icon/16/094.png"))); // Globe icon
@@ -717,7 +716,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 				nsd.setAllowRoot(allowRoot);
 				SiteNode node = nsd.showDialog(this.node);
 				if (node != null) {
-					text.setText(getNodeText(node));
+					text.setText(StandardFieldsUtils.getNodeText(node));
 					this.node = node;
 					siteNodeSelected(fieldLabel, node);
 				}
@@ -772,57 +771,10 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 	}
 	
 	private void setTextTarget(ZapTextField field, Target target) {
-		String text = getTargetText(target);
+		String text = StandardFieldsUtils.getTargetText(target);
 		if (text != null) {
 			field.setText(text);
 		}
-	}
-
-	/**
-	 * Returns the text representation of the given {@code target}.
-	 * <p>
-	 * If the {@code target} is not {@code null} it returns:
-	 * <ol>
-	 * <li>the URI, if it has a start node with an history reference;</li>
-	 * <li>"Context: " followed by context's name, if it has a context;</li>
-	 * <li>"Everything in scope", if it's only in scope.</li>
-	 * </ol>
-	 * For remaining cases it returns {@code null}.
-	 *
-	 * @param target the target whose text representation will be returned
-	 * @return the text representation of the given {@code target}, might be {@code null}
-	 * @since 2.4.2
-	 * @see Target#getStartNode()
-	 * @see Target#getContext()
-	 * @see Target#isInScopeOnly()
-	 */
-	protected static String getTargetText(Target target) {
-		if (target != null) {
-			if (target.getStartNode() != null) {
-				return getNodeText(target.getStartNode());
-			} else if (target.getContext() != null) {
-				return Constant.messages.getString("context.prefixName", target.getContext().getName());
-			} else if (target.isInScopeOnly()) {
-				return Constant.messages.getString("context.allInScope");
-			}
-		}
-		return null;
-	}
-
-	private static String getNodeText(SiteNode node) {
-		if (node != null && node.getHistoryReference() != null) {
-			String url = node.getHistoryReference().getURI().toString();
-			if (node.isLeaf() && url.endsWith("/")) {
-				// String off the slash so we dont match a non leaf
-				// node with the same name
-				url = url.substring(0, url.length()-1);
-			} else if (! node.isLeaf() && ! url.endsWith("/")) {
-				// Add the slash to show its a non leaf node
-				url = url + "/";
-			}
-			return url;
-		}
-		return "";
 	}
 
 	public void addFileSelectField(String fieldLabel, final File dir, final int mode, final FileFilter filter) {
@@ -1042,40 +994,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 
 	public void setCustomTabPanel(int i, JComponent panel) {
 		this.tabPanels.get(i).add(panel, LayoutHelper.getGBC(0, 0, 1, 1.0D, 1.0D, GridBagConstraints.BOTH));
-	}
-
-	public void addFieldListener(String fieldLabel, ActionListener listener) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ZapTextField) {
-				((ZapTextField)c).addActionListener(listener);
-			} else if (c instanceof JPasswordField) {
-				((JPasswordField)c).addActionListener(listener);
-			} else if (c instanceof JComboBox) {
-				((JComboBox<?>)c).addActionListener(listener);
-			} else if (c instanceof JCheckBox) {
-				((JCheckBox)c).addActionListener(listener);
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-	}
-
-	public void addFieldListener(String fieldLabel, MouseAdapter listener) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ZapTextField) {
-				((ZapTextField)c).addMouseListener(listener);
-			} else if (c instanceof ZapTextArea) {
-				((ZapTextArea)c).addMouseListener(listener);
-			} else if (c instanceof JPasswordField) {
-				((JPasswordField)c).addMouseListener(listener);
-			} else if (c instanceof JComboBox) {
-				((JComboBox<?>)c).addMouseListener(listener);
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
 	}
 
 	public void removeAllFields() {

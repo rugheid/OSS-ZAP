@@ -377,7 +377,7 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 								Constant.messages.getString(VALUE_TYPE_DATA)),
 							getModVal(type)
 						));
-				this.addFieldListener(FIELD_TYPE, new ActionListener() {
+				StandardFieldsUtils.addFieldListener(this.getField(FIELD_TYPE), new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						setFieldStates();						
