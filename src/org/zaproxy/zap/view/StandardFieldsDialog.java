@@ -452,19 +452,10 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 	}
 
 	public void addField(String fieldLabel, Component field) {
-	    if (isTabbed()) {
-	    	throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		double weighty = 0.0D;
-	    Component wrapper = field;
-		if (shouldBeInScrollPane(field)) {
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			scrollPane.setViewportView(field);
-			wrapper = scrollPane;
-			weighty = 1.0D;
-		}
-		this.addField(fieldLabel, field, wrapper, weighty);
+        if (isTabbed()) {
+            throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
+        }
+        this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field);
 	}
 
 	public void addFieldInTab(String fieldLabel, Component field, int tabIndex) {
@@ -474,20 +465,26 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
 			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
 		}
-		// TODO: This code is duplicated and should be moved to the private addField method, therefore the wrapper parameter should be removed.
-		// This will inflict other methods, so should be done carefully!!!
-		double weighty = 0.0D;
-		Component wrapper = field;
-		if (shouldBeInScrollPane(field)) {
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			scrollPane.setViewportView(field);
-			wrapper = scrollPane;
-			weighty = 1.0D;
-		}
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field, wrapper, weighty);
+		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field);
 		incTabOffset(tabIndex);
 	}
+
+	private void addField(String fieldLabel, Component field, Component wrapper, double weighty) {
+	    this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field, wrapper, weighty);
+    }
+
+	private void addField(JPanel panel, int indexy, String fieldLabel, Component field) {
+        double weighty = 0.0D;
+        Component wrapper = field;
+        if (shouldBeInScrollPane(field)) {
+            JScrollPane scrollPane = new JScrollPane();
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.setViewportView(field);
+            wrapper = scrollPane;
+            weighty = 1.0D;
+        }
+        this.addField(panel, indexy, fieldLabel, field, wrapper, weighty);
+    }
 
 	private void addField(JPanel panel, int indexy, String fieldLabel, Component field, Component wrapper, double weighty) {
 		if (this.fieldList.contains(field)) {
@@ -496,24 +493,16 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		JLabel label = new JLabel(Constant.messages.getString(fieldLabel));
 		label.setLabelFor(field);
 		label.setVerticalAlignment(JLabel.TOP);
-		panel.add(label, 
+		panel.add(label,
 				LayoutHelper.getGBC(0, indexy, 1, labelWeight, weighty, GridBagConstraints.BOTH, new Insets(4,4,4,4)));
 		panel.add(wrapper,
 				LayoutHelper.getGBC(1, indexy, 1, fieldWeight, weighty, GridBagConstraints.BOTH, new Insets(4,4,4,4)));
 		this.fieldList.add(field);
 		this.fieldMap.put(fieldLabel, field);
-		
 		if (indexy == 0 && panel.equals(this.getMainPanel())) {
 			// First field, always grab focus
 			field.requestFocusInWindow();
 		}
-	}
-
-	private void addField(String fieldLabel, Component field, Component wrapper, double weighty) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field, wrapper, weighty);
 	}
 
 	public void addTableField(String fieldLabel, JTable field) {
