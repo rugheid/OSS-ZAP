@@ -458,7 +458,19 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
         this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field);
 	}
 
-	public void addFieldInTab(String fieldLabel, Component field, int tabIndex) {
+    /*
+     * Add a 'node select' field which provides a button for showing a Node Select Dialog and a
+     * non editable field for showing the node selected
+     */
+    public void addNodeSelectField(final String fieldLabel, NodeSelectField nodeSelectField) {
+        if (isTabbed()) {
+            throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
+        }
+        nodeSelectField.setSelectedNodeConsumer(siteNode -> siteNodeSelected(fieldLabel, siteNode));
+        this.addField(fieldLabel, nodeSelectField.getTextField(), nodeSelectField.getPanel(), 0.0D);
+    }
+
+    public void addFieldInTab(String fieldLabel, Component field, int tabIndex) {
 		if (!isTabbed()) {
 			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
 		}
@@ -468,6 +480,22 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, field);
 		incTabOffset(tabIndex);
 	}
+
+    /*
+     * Add a 'node select' field which provides a button for showing a Node Select Dialog and a
+     * non editable field for showing the node selected
+     */
+    public void addNodeSelectFieldInTab(String fieldLabel, NodeSelectField nodeSelectField, int tabIndex) {
+        if (!isTabbed()) {
+            throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
+        }
+        if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
+            throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
+        }
+        nodeSelectField.setSelectedNodeConsumer(siteNode -> siteNodeSelected(fieldLabel, siteNode));
+        this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, nodeSelectField.getTextField(), nodeSelectField.getPanel(), 0.0D);
+        this.incTabOffset(tabIndex);
+    }
 
 	private void addField(String fieldLabel, Component field, Component wrapper, double weighty) {
 	    this.addField(this.getMainPanel(), this.fieldList.size(), fieldLabel, field, wrapper, weighty);
@@ -623,92 +651,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		this.incTabOffset(tabIndex);
 	}
 
-	/*
-	 * Add a 'node select' field which provides a button for showing a Node Select Dialog and a 
-	 * non editable field for showing the node selected
-	 */
-	public void addNodeSelectField(final String fieldLabel, final SiteNode value, 
-			final boolean editable, final boolean allowRoot) {
-		if (isTabbed()) {
-			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
-		}
-		final ZapTextField text = new ZapTextField();
-		text.setEditable(editable);
-		if (value != null) {
-			text.setText(StandardFieldsUtils.getNodeText(value));
-		}
-		JButton selectButton = new JButton(Constant.messages.getString("all.button.select"));
-		selectButton.setIcon(new ImageIcon(View.class.getResource("/resource/icon/16/094.png"))); // Globe icon
-		selectButton.addActionListener(new java.awt.event.ActionListener() { 
-			// Keep a local copy so that we can always select the last node chosen
-			SiteNode node = value;
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				NodeSelectDialog nsd = new NodeSelectDialog(StandardFieldsDialog.this);
-				nsd.setAllowRoot(allowRoot);
-				SiteNode node = nsd.showDialog(this.node);
-				if (node != null) {
-					text.setText(StandardFieldsUtils.getNodeText(node));
-					this.node = node;
-					siteNodeSelected(fieldLabel, node);
-				}
-			}
-		});
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		panel.add(text, LayoutHelper.getGBC(0, 0, 1, 1.0D, 0.0D, GridBagConstraints.BOTH, new Insets(4,4,4,4)));
-		panel.add(selectButton, LayoutHelper.getGBC(1, 0, 1, 0.0D, 0.0D, GridBagConstraints.BOTH, new Insets(4,4,4,4)));
-		
-		this.addField(fieldLabel, text, panel, 0.0D);
-	}
-	
-	/*
-	 * Add a 'node select' field which provides a button for showing a Node Select Dialog and a 
-	 * non editable field for showing the node selected
-	 */
-	public void addNodeSelectField(int tabIndex, final String fieldLabel, final SiteNode value, 
-			final boolean editable, final boolean allowRoot) {
-		if (!isTabbed()) {
-			throw new IllegalArgumentException("Not initialised as a tabbed dialog - must use method without tab parameters");
-		}
-		if (tabIndex < 0 || tabIndex >= this.tabPanels.size()) {
-			throw new IllegalArgumentException("Invalid tab index: " + tabIndex);
-		}
-		final ZapTextField text = new ZapTextField();
-		text.setEditable(editable);
-		if (value != null) {
-			text.setText(StandardFieldsUtils.getNodeText(value));
-		}
-		JButton selectButton = new JButton(Constant.messages.getString("all.button.select"));
-		selectButton.setIcon(new ImageIcon(View.class.getResource("/resource/icon/16/094.png"))); // Globe icon
-		selectButton.addActionListener(new java.awt.event.ActionListener() { 
-			// Keep a local copy so that we can always select the last node chosen
-			SiteNode node = value;
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				NodeSelectDialog nsd = new NodeSelectDialog(StandardFieldsDialog.this);
-				nsd.setAllowRoot(allowRoot);
-				SiteNode node = nsd.showDialog(this.node);
-				if (node != null) {
-					text.setText(StandardFieldsUtils.getNodeText(node));
-					this.node = node;
-					siteNodeSelected(fieldLabel, node);
-				}
-			}
-		});
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		panel.add(text, LayoutHelper.getGBC(0, 0, 1, 1.0D, 0.0D, GridBagConstraints.BOTH, new Insets(4,4,4,4)));
-		panel.add(selectButton, LayoutHelper.getGBC(1, 0, 1, 0.0D, 0.0D, GridBagConstraints.BOTH, new Insets(4,4,4,4)));
-		
-		this.addField(this.tabPanels.get(tabIndex), this.tabOffsets.get(tabIndex), fieldLabel, text, panel, 0.0D);
-		this.incTabOffset(tabIndex);
-	}
-	
-	/*
-	 * Add a 'node select' field which provides a button for showing a Node Select Dialog and a 
-	 * non editable field for showing the node selected
-	 */
 	public void addTargetSelectField(int tabIndex, final String fieldLabel, final Target value,
 			final boolean editable, final boolean allowRoot) {
 		if (!isTabbed()) {

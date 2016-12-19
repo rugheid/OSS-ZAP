@@ -1,5 +1,8 @@
 package org.zaproxy.zap.view;
 
+import org.parosproxy.paros.Constant;
+import org.parosproxy.paros.model.SiteNode;
+import org.parosproxy.paros.view.View;
 import org.zaproxy.zap.model.Context;
 import org.zaproxy.zap.utils.ZapNumberSpinner;
 import org.zaproxy.zap.utils.ZapTextArea;
@@ -7,7 +10,10 @@ import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.widgets.ContextSelectComboBox;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class StandardFieldsFactory {
 
@@ -94,5 +100,10 @@ public class StandardFieldsFactory {
             field.setSelectedItem(selectedContext);
         }
         return field;
+    }
+
+    public NodeSelectField createNodeSelectField(final SiteNode value, final boolean allowRoot) {
+        NodeSelectField nodeSelectField = new NodeSelectField(value, allowRoot);
+        return nodeSelectField;
     }
 }
