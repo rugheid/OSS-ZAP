@@ -76,10 +76,7 @@ import org.zaproxy.zap.model.Target;
 import org.zaproxy.zap.users.User;
 import org.zaproxy.zap.utils.ZapTextArea;
 import org.zaproxy.zap.utils.ZapTextField;
-import org.zaproxy.zap.view.LayoutHelper;
-import org.zaproxy.zap.view.StandardFieldsDialog;
-import org.zaproxy.zap.view.StandardFieldsFactory;
-import org.zaproxy.zap.view.TechnologyTreePanel;
+import org.zaproxy.zap.view.*;
 
 public class CustomScanDialog extends StandardFieldsDialog {
 	
@@ -372,7 +369,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
             this.setTech();
         }
         
-        this.setComboFields(FIELD_CONTEXT, ctxNames, "");
+        StandardFieldsUtils.setComboFields((JComboBox<String>)this.getField(FIELD_CONTEXT), ctxNames, "");
         this.getField(FIELD_CONTEXT).setEnabled(ctxNames.size() > 0);
     }
 
@@ -409,7 +406,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
                 userNames.add(user.getName());
             }
         }
-        this.setComboFields(FIELD_USER, userNames, "");
+        StandardFieldsUtils.setComboFields((JComboBox<String>)this.getField(FIELD_USER), userNames, "");
         this.getField(FIELD_USER).setEnabled(userNames.size() > 1);	// Theres always 1..
     }
 

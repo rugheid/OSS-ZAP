@@ -49,6 +49,7 @@ import org.zaproxy.zap.utils.ZapNumberSpinner;
 import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
 
 public class SpiderDialog extends StandardFieldsDialog {
 
@@ -240,7 +241,7 @@ public class SpiderDialog extends StandardFieldsDialog {
             	ctxNames.add(node.getContext().getName());
             }
         }
-        this.setComboFields(FIELD_CONTEXT, ctxNames, "");
+        StandardFieldsUtils.setComboFields((JComboBox<String>)this.getField(FIELD_CONTEXT), ctxNames, "");
        	this.getField(FIELD_CONTEXT).setEnabled(ctxNames.size() > 0);
     }
     
@@ -277,7 +278,7 @@ public class SpiderDialog extends StandardFieldsDialog {
         		userNames.add(user.getName());
             }
     	}
-        this.setComboFields(FIELD_USER, userNames, "");
+        StandardFieldsUtils.setComboFields((JComboBox<String>)this.getField(FIELD_USER), userNames, "");
        	this.getField(FIELD_USER).setEnabled(userNames.size() > 1);	// Theres always 1..
     }
 
