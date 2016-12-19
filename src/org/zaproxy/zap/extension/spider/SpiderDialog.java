@@ -161,7 +161,7 @@ public class SpiderDialog extends StandardFieldsDialog {
         this.addPadding(1);
 
     	if (! ((JCheckBox)getField(FIELD_PROCESS_FORMS)).isSelected()) {
-        	setFieldValue(FIELD_POST_FORMS, false);
+        	StandardFieldsUtils.setFieldValue(getField(FIELD_POST_FORMS), false);
         	getField(FIELD_POST_FORMS).setEnabled(false);
     	}
 
@@ -177,7 +177,7 @@ public class SpiderDialog extends StandardFieldsDialog {
             	if (((JCheckBox)getField(FIELD_PROCESS_FORMS)).isSelected()) {
                 	getField(FIELD_POST_FORMS).setEnabled(true);
             	} else {
-                	setFieldValue(FIELD_POST_FORMS, false);
+                	StandardFieldsUtils.setFieldValue(getField(FIELD_POST_FORMS), false);
                 	getField(FIELD_POST_FORMS).setEnabled(false);
             	}
             }
@@ -247,7 +247,7 @@ public class SpiderDialog extends StandardFieldsDialog {
     
     private Context getSelectedContext() {
     	String ctxName = ((ZapTextField)this.getField(FIELD_CONTEXT)).getText();
-    	if (this.extUserMgmt != null && ! this.isEmptyField(FIELD_CONTEXT)) {
+    	if (this.extUserMgmt != null && ! StandardFieldsUtils.isEmptyField(getField(FIELD_CONTEXT))) {
             Session session = Model.getSingleton().getSession();
             return session.getContext(ctxName);
     	}
@@ -395,7 +395,7 @@ public class SpiderDialog extends StandardFieldsDialog {
             return Constant.messages.getString("spider.custom.notSafe.error");
         }
 
-    	if (this.isEmptyField(FIELD_START)) {
+    	if (StandardFieldsUtils.isEmptyField(getField(FIELD_START))) {
             return Constant.messages.getString("spider.custom.nostart.error");
     	}
 

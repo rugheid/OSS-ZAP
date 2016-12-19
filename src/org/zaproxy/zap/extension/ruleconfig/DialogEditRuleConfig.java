@@ -31,6 +31,7 @@ import org.zaproxy.zap.utils.ZapTextArea;
 import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
 
 public class DialogEditRuleConfig extends StandardFieldsDialog {
 
@@ -76,7 +77,7 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
 
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    setFieldValue(FIELD_VALUE, rc.getDefaultValue());
+                    StandardFieldsUtils.setFieldValue(getField(FIELD_VALUE), rc.getDefaultValue());
                 }});
         }
         return resetButton;

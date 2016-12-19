@@ -54,9 +54,9 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 	@Override
 	public void siteNodeSelected(String field, SiteNode node) {
 		topNode = node;
-		if (node != null && this.isEmptyField(NAME_FIELD)) {
+		if (node != null && StandardFieldsUtils.isEmptyField(getField(NAME_FIELD))) {
 			// They havnt chosen a context name yet, default to the name of the node they chose
-			this.setFieldValue(NAME_FIELD, node.getNodeName());
+			StandardFieldsUtils.setFieldValue(getField(NAME_FIELD), node.getNodeName());
 		}
 	}
 
@@ -80,7 +80,7 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 
 	@Override
 	public String validateFields() {
-		if (this.isEmptyField(NAME_FIELD)) {
+		if (StandardFieldsUtils.isEmptyField(getField(NAME_FIELD))) {
 			return Constant.messages.getString("context.create.warning.noname");
 		}
 		return null;

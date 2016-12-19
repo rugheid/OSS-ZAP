@@ -31,6 +31,7 @@ import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Match;
 import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
 import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
 
 import javax.swing.*;
 
@@ -147,7 +148,7 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 
 	@Override
 	public String validateFields() {
-		if (this.isEmptyField(FIELD_STRING)) {
+		if (StandardFieldsUtils.isEmptyField(getField(FIELD_STRING))) {
 			return Constant.messages.getString("brk.brkpoint.error.nostr"); 
 		}
 		if (Match.regex.equals(this.strToMatch(((ZapTextField)this.getField(FIELD_MATCH)).getText()))) {

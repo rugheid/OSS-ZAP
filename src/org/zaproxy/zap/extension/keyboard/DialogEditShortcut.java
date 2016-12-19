@@ -108,10 +108,10 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 	private void checkDuplicate() {
 		KeyboardShortcut ks = this.getDuplicate();
 		if (ks != null) {
-			this.setFieldValue(FIELD_INFO, 
+			StandardFieldsUtils.setFieldValue(getField(FIELD_INFO),
 					MessageFormat.format(Constant.messages.getString("keyboard.dialog.warning.dup"), ks.getName()));
 		} else {
-			this.setFieldValue(FIELD_INFO, "");
+			StandardFieldsUtils.setFieldValue(getField(FIELD_INFO), "");
 		}
 	}
 	

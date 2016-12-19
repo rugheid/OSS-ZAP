@@ -431,7 +431,7 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 			}
 			
 			if (StructuralNodeModifier.Type.DataDrivenNode.equals(type)) {
-				if (this.isEmptyField(FIELD_REGEX)) {
+				if (StandardFieldsUtils.isEmptyField(getField(FIELD_REGEX))) {
 					return Constant.messages.getString("context.ddn.dialog.error.regex");
 				}
 				if (! ((ZapTextField)this.getField(FIELD_REGEX)).getText().matches(".*\\(.*\\).*\\(.*\\).*")) {

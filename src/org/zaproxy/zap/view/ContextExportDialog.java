@@ -54,19 +54,17 @@ public class ContextExportDialog extends StandardFieldsDialog {
 		this.addField(FILE_FIELD, StandardFieldsFactory.get().createTextField(null));
 		this.addField(OVERWRITE_FIELD, StandardFieldsFactory.get().createCheckBoxField(false));
 		
-		StandardFieldsUtils.addFieldListener(this.getField(CONTEXT_FIELD), new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Context ctx = ((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext();
-				if (ctx != null) {
-					String fileName = ctx.getName() + CONTEXT_EXT;
-					setFieldValue(FILE_FIELD, fileName);
-				}
-			}});
+		StandardFieldsUtils.addFieldListener(this.getField(CONTEXT_FIELD), e -> {
+            Context ctx = ((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext();
+            if (ctx != null) {
+                String fileName = ctx.getName() + CONTEXT_EXT;
+                StandardFieldsUtils.setFieldValue(getField(FILE_FIELD), fileName);
+            }
+        });
 	}
 	
 	private File getSelectedFile() {
-		if (this.isEmptyField(DIR_FIELD) || this.isEmptyField(FILE_FIELD)) {
+		if (StandardFieldsUtils.isEmptyField(getField(DIR_FIELD)) || StandardFieldsUtils.isEmptyField(getField(FILE_FIELD))) {
 			return null;
 		}
 		String dirValue = ((ZapTextField)this.getField(DIR_FIELD)).getText();

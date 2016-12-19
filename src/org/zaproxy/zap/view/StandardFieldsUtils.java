@@ -3,6 +3,7 @@ package org.zaproxy.zap.view;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.model.SiteNode;
 import org.zaproxy.zap.model.Target;
+import org.zaproxy.zap.utils.ZapNumberSpinner;
 import org.zaproxy.zap.utils.ZapTextArea;
 import org.zaproxy.zap.utils.ZapTextField;
 
@@ -56,6 +57,14 @@ public class StandardFieldsUtils {
         return null;
     }
 
+    public static void setTextTarget(ZapTextField field, Target target) {
+        String text = StandardFieldsUtils.getTargetText(target);
+        if (text != null) {
+            field.setText(text);
+        }
+    }
+
+
     public static String getNodeText(SiteNode node) {
         if (node != null && node.getHistoryReference() != null) {
             String url = node.getHistoryReference().getURI().toString();
@@ -99,4 +108,52 @@ public class StandardFieldsUtils {
             }
         }
     }
+
+    public static void setFieldValue(Component c, String value) {
+        if (c != null) {
+            if (c instanceof ZapTextField) {
+                ((ZapTextField)c).setText(value);
+            } else if (c instanceof JPasswordField) {
+                ((JPasswordField)c).setText(value);
+            } else if (c instanceof ZapTextArea) {
+                ((ZapTextArea)c).setText(value);
+            } else if (c instanceof JComboBox) {
+                ((JComboBox<?>)c).setSelectedItem(value);
+            } else if (c instanceof JLabel) {
+                ((JLabel)c).setText(value);
+            }
+        }
+    }
+
+    public static void setFieldValue(Component c, boolean value) {
+        if (c != null) {
+            if (c instanceof JCheckBox) {
+                ((JCheckBox)c).setSelected(value);
+            }
+        }
+    }
+
+    public static boolean isEmptyField(Component c) {
+        if (c != null) {
+            Object value = null;
+            if (c instanceof ZapTextField) {
+                value = ((ZapTextField)c).getText();
+            } else if (c instanceof JPasswordField) {
+                return ((JPasswordField) c).getDocument().getLength() == 0;
+            } else if (c instanceof ZapTextArea) {
+                value = ((ZapTextArea)c).getText();
+            } else if (c instanceof JComboBox) {
+                value = ((JComboBox<?>)c).getSelectedItem();
+            } else if (c instanceof ZapNumberSpinner) {
+                value = ((ZapNumberSpinner)c).getValue();
+                if ((Integer)value < 0) {
+                    value = null;
+                }
+            }
+            return value == null || value.toString().length() == 0;
+
+        }
+        return true;
+    }
+
 }

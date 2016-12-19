@@ -745,7 +745,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		}
 		final ZapTextField text = new ZapTextField();
 		text.setEditable(editable);
-		this.setTextTarget(text, value);
+		StandardFieldsUtils.setTextTarget(text, value);
 
 		JButton selectButton = new JButton(Constant.messages.getString("all.button.select"));
 		selectButton.setIcon(new ImageIcon(View.class.getResource("/resource/icon/16/094.png"))); // Globe icon
@@ -757,7 +757,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 				NodeSelectDialog nsd = new NodeSelectDialog(StandardFieldsDialog.this);
 				nsd.setAllowRoot(allowRoot);
 				target = nsd.showDialog(target);
-				setTextTarget(text, target);
+				StandardFieldsUtils.setTextTarget(text, target);
 				targetSelected(fieldLabel, target);
 			}
 		});
@@ -770,13 +770,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		this.incTabOffset(tabIndex);
 	}
 	
-	private void setTextTarget(ZapTextField field, Target target) {
-		String text = StandardFieldsUtils.getTargetText(target);
-		if (text != null) {
-			field.setText(text);
-		}
-	}
-
 	public void addFileSelectField(String fieldLabel, final File dir, final int mode, final FileFilter filter) {
 		if (isTabbed()) {
 			throw new IllegalArgumentException("Initialised as a tabbed dialog - must use method with tab parameters");
@@ -890,62 +883,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 	 */
 	public Component getField(String fieldLabel) {
 		return this.fieldMap.get(fieldLabel);
-	}
-
-	public void setFieldValue(String fieldLabel, String value) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof ZapTextField) {
-				((ZapTextField)c).setText(value);
-			} else if (c instanceof JPasswordField) {
-				((JPasswordField)c).setText(value);
-			} else if (c instanceof ZapTextArea) {
-				((ZapTextArea)c).setText(value);
-			} else if (c instanceof JComboBox) {
-				((JComboBox<?>)c).setSelectedItem(value);
-			} else if (c instanceof JLabel) {
-				((JLabel)c).setText(value);
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-	}
-	
-	public void setFieldValue(String fieldLabel, boolean value) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			if (c instanceof JCheckBox) {
-				((JCheckBox)c).setSelected(value);
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-		}
-	}
-	
-	public boolean isEmptyField(String fieldLabel) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c != null) {
-			Object value = null;
-			if (c instanceof ZapTextField) {
-				value = ((ZapTextField)c).getText();
-			} else if (c instanceof JPasswordField) {
-				return ((JPasswordField) c).getDocument().getLength() == 0;
-			} else if (c instanceof ZapTextArea) {
-				value = ((ZapTextArea)c).getText();
-			} else if (c instanceof JComboBox) {
-				value = ((JComboBox<?>)c).getSelectedItem();
-			} else if (c instanceof ZapNumberSpinner) {
-				value = ((ZapNumberSpinner)c).getValue();
-				if ((Integer)value < 0) {
-					value = null;
-				}
-			} else {
-				logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-			}
-			return value == null || value.toString().length() == 0;
-			
-		}
-		return true;
 	}
 
 	public void addReadOnlyField(String fieldLabel, String value, boolean doubleWidth) {

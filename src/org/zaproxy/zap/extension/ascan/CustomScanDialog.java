@@ -370,7 +370,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
 
     private Context getSelectedContext() {
         String ctxName = ((ZapTextField)this.getField(FIELD_CONTEXT)).getText();
-        if (this.extUserMgmt != null && !this.isEmptyField(FIELD_CONTEXT)) {
+        if (this.extUserMgmt != null && !StandardFieldsUtils.isEmptyField(getField(FIELD_CONTEXT))) {
             Session session = Model.getSingleton().getSession();
             return session.getContext(ctxName);
         }
@@ -561,11 +561,11 @@ public class CustomScanDialog extends StandardFieldsDialog {
                     getVariantPanel().setAllInjectableAndRPC(!disableNonCustomVectors.isSelected());
 
                     if (disableNonCustomVectors.isSelected()) {
-                        setFieldValue(FIELD_DISABLE_VARIANTS_MSG,
+                        StandardFieldsUtils.setFieldValue(getField(FIELD_DISABLE_VARIANTS_MSG),
                                 Constant.messages.getString("ascan.custom.warn.disabled"));
                     
                     } else {
-                        setFieldValue(FIELD_DISABLE_VARIANTS_MSG, "");
+                        StandardFieldsUtils.setFieldValue(getField(FIELD_DISABLE_VARIANTS_MSG), "");
                     }
 
                 }
