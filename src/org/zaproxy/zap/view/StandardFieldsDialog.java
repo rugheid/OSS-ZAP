@@ -648,27 +648,8 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		this.fieldList.add(field);
 		this.incTabOffset(tabIndex);
 	}
-	
-	public void setComboFields(String fieldLabel, String[] choices, String value) {
-		Component c = this.fieldMap.get(fieldLabel);
-		if (c instanceof JComboBox) {
-			@SuppressWarnings("unchecked")
-			JComboBox<String> comboBox = (JComboBox<String>)c;
-			comboBox.removeAllItems();
-			for (String str : choices) {
-				comboBox.addItem(str);
-			}
-			if (value != null) {
-				comboBox.setSelectedItem(value);
-			}
-		} else if (c == null) {
-			// Ignore - could be during init
-			logger.debug("No field for " + fieldLabel);
-		} else {
-			logger.error("Unrecognised field class " + fieldLabel + ": " + c.getClass().getCanonicalName());
-		}
-	}
-	
+
+	// TODO: Move this to a Utils file?
 	public void setComboFields(String fieldLabel, List<String> choices, String value) {
 		Component c = this.fieldMap.get(fieldLabel);
 		if (c instanceof JComboBox) {
