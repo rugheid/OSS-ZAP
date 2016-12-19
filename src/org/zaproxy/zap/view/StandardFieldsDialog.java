@@ -338,25 +338,22 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 		if (saveButton == null) {
 			saveButton = new JButton();
 			saveButton.setText(this.getSaveButtonText());
-			saveButton.addActionListener(new ActionListener() { 
-				@Override
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (!validateFieldsCustomMessage()) {
-						return;
-					}
+			saveButton.addActionListener(e -> {
+                if (!validateFieldsCustomMessage()) {
+                    return;
+                }
 
-					String errorMsg = validateFields();
-					if (errorMsg != null) {
-						View.getSingleton().showWarningDialog(StandardFieldsDialog.this, errorMsg);
-						return;
-					}
-					save();
+                String errorMsg = validateFields();
+                if (errorMsg != null) {
+                    View.getSingleton().showWarningDialog(StandardFieldsDialog.this, errorMsg);
+                    return;
+                }
+                save();
 
-					if (isHideOnSave()) {
-						setVisible(false);
-					}
-				}
-			});
+                if (isHideOnSave()) {
+                    setVisible(false);
+                }
+            });
 		}
 		return saveButton;
 	}
@@ -394,13 +391,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 			cancelButton = new JButton();
 			cancelButton.setText(this.getCancelButtonText());
 
-			cancelButton.addActionListener(new java.awt.event.ActionListener() { 
-
-				@Override
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					cancelPressed();
-				}
-			});
+			cancelButton.addActionListener(e -> cancelPressed());
 		}
 		return cancelButton;
 	}
@@ -411,13 +402,7 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 			helpButton.setIcon(ExtensionHelp.HELP_ICON);
 			helpButton.setToolTipText(Constant.messages.getString("help.dialog.button.tooltip"));
 
-			helpButton.addActionListener(new java.awt.event.ActionListener() { 
-
-				@Override
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					ExtensionHelp.showHelp(helpIndex);
-				}
-			});
+			helpButton.addActionListener(e -> ExtensionHelp.showHelp(helpIndex));
 		}
 		return helpButton;
 	}
@@ -860,7 +845,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 	 * @see #addNodeSelectField(String, SiteNode, boolean, boolean)
 	 */
 	public void siteNodeSelected(String field, SiteNode node) {
-		
 	}
 
 	/**
@@ -873,7 +857,6 @@ public abstract class StandardFieldsDialog extends AbstractDialog {
 	 * @see #addTargetSelectField(int, String, Target, boolean, boolean)
 	 */
 	public void targetSelected(String field, Target target) {
-		
 	}
 
 	/**
