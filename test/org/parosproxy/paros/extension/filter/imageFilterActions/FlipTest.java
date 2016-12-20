@@ -36,8 +36,8 @@ public class FlipTest {
 
     @Test
     public void testFlipImage() {
-        HttpMessage message = FilterTestUtils.createMessageFromImage("trump.jpg", "jpg", "www.trump.me");
-        HttpMessage original = FilterTestUtils.createMessageFromImage("trump.jpg", "jpg", "www.trump.me");
+        HttpMessage message = FilterTestUtils.createMessageFromImage("trump.jpg", "jpg", "/trump");
+        HttpMessage original = FilterTestUtils.createMessageFromImage("trump.jpg", "jpg", "/trump");
         flip.onHttpResponseReceive(message);
         assertFalse(message.getResponseBody().getBytes().equals(original.getResponseBody().getBytes()));
         assertEquals(message.getResponseHeader().getContentLength(), message.getResponseBody().getBytes().length);
