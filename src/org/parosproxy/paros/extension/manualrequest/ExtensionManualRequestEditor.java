@@ -105,10 +105,10 @@ public class ExtensionManualRequestEditor extends ExtensionAdaptor implements Se
 			dialogue.clear();
 			dialogue.dispose();
 
-			if (getView() != null) {
+			ViewDelegate view = getView();
+			if (view != null) {
 				// unload menu items
-				ExtensionManager extLoader = Control.getSingleton().getExtensionLoader();
-				extLoader.removeToolsMenuItem(dialogue.getMenuItem());
+				view.getMainFrame().getMainMenuBar().getMenuTools().remove(dialogue.getMenuItem());
 			}
 		}
 	}

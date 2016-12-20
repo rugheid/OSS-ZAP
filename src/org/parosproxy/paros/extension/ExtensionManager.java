@@ -544,60 +544,6 @@ public class ExtensionManager {
         extensionHookLoader.hookCommandLineListener(cmdLine);
     }
 
-    public void removeStatusPanel(AbstractPanel panel) {
-
-        extensionHookLoader.removeStatusPanel(panel);
-    }
-
-    public void removeOptionsPanel(AbstractParamPanel panel) {
-
-        extensionHookLoader.removeOptionsPanel(panel);
-    }
-
-    public void removeOptionsParamSet(AbstractParam params) {
-        extensionHookLoader.removeOptionsParamSet(params);
-    }
-
-    public void removeWorkPanel(AbstractPanel panel) {
-
-        extensionHookLoader.removeWorkPanel(panel);
-    }
-
-    public void removePopupMenuItem(ExtensionPopupMenuItem popupMenuItem) {
-
-        extensionHookLoader.removePopupMenuItem(popupMenuItem);
-    }
-
-    public void removeFileMenuItem(JMenuItem menuItem) {
-
-        extensionHookLoader.removeFileMenuItem(menuItem);
-    }
-
-    public void removeEditMenuItem(JMenuItem menuItem) {
-
-        extensionHookLoader.removeEditMenuItem(menuItem);
-    }
-
-    public void removeViewMenuItem(JMenuItem menuItem) {
-
-        extensionHookLoader.removeViewMenuItem(menuItem);
-    }
-
-    public void removeToolsMenuItem(JMenuItem menuItem) {
-
-        extensionHookLoader.removeToolsMenuItem(menuItem);
-    }
-
-    public void removeHelpMenuItem(JMenuItem menuItem) {
-
-        extensionHookLoader.removeHelpMenuItem(menuItem);
-    }
-
-    public void removeReportMenuItem(JMenuItem menuItem) {
-
-        extensionHookLoader.removeReportMenuItem(menuItem);
-    }
-
     /**
      * Init all extensions
      */
