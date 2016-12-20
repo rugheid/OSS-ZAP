@@ -73,7 +73,11 @@ public class FilterTestUtils {
         HttpMessage message = new HttpMessage();
         try {
             BufferedImage img = ImageIO.read(BASE_DIR_HTML_FILES.resolve(fileName).toFile());
-            byte[] bytes = ((DataBufferByte)img.getRaster().getDataBuffer()).getData();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(img, imageType, baos);
+            baos.flush();
+            byte[] bytes = baos.toByteArray();
+            baos.close();
             message.setRequestHeader("GET " + requestUri + " HTTP/1.1\r\nHost: example.com\r\n");
             message.setResponseHeader(
                     "HTTP/1.1 200 OK\r\n" + "Content-Type: image/" + imageType + "; charset=UTF-8\r\n" + "Content-Length: "

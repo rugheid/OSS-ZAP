@@ -22,6 +22,7 @@ public class FlipTest {
         HttpMessage original = new HttpMessage();
         flip.onHttpResponseReceive(message);
         assertEquals(message, original);
+        assertArrayEquals(message.getResponseBody().getBytes(), original.getResponseBody().getBytes());
     }
 
     @Test
@@ -30,6 +31,7 @@ public class FlipTest {
         HttpMessage original = FilterTestUtils.createMessageWith("simple.html");
         flip.onHttpResponseReceive(message);
         assertEquals(message, original);
+        assertArrayEquals(message.getResponseBody().getBytes(), original.getResponseBody().getBytes());
     }
 
     @Test
