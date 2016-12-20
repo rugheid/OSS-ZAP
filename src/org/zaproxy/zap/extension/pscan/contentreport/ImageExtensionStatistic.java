@@ -16,7 +16,7 @@ public class ImageExtensionStatistic implements Statistic {
 	private HashMap<String, Integer> nbExtensions = new HashMap<>();
 	private int totalImages = 0;
 	
-	public void addEntry(HttpMessage msg) {
+	public void update(HttpMessage msg) {
 		String extension = "";
 		try {
 			extension = extensionOfImageFromBytes(msg.getResponseBody().getBytes());

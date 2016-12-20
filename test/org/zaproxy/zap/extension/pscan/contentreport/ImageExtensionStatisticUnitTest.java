@@ -34,10 +34,10 @@ public class ImageExtensionStatisticUnitTest {
 		HttpMessage jpgMsg = createImageMessageWith(12, 12, "JPEG");
 		
 		for(int i = 0; i < 7; i++) {
-			statistic.addEntry(pngMsg);
+			statistic.update(pngMsg);
 		}
 		for(int i = 0; i < 3; i++) {
-			statistic.addEntry(jpgMsg);
+			statistic.update(jpgMsg);
 		}
 		assertEquals(70.0, statistic.getPercentage("png"), 0.0001);
 		assertEquals(30.0, statistic.getPercentage("JPEG"), 0.0001);
@@ -50,13 +50,13 @@ public class ImageExtensionStatisticUnitTest {
 		HttpMessage badMsg = createMessageWith("200 OK", "image/lol", new byte[] {1, 2, 3, 4});
 		
 		for(int i = 0; i < 5; i++) {
-			statistic.addEntry(pngMsg);
+			statistic.update(pngMsg);
 		}
 		for(int i = 0; i < 3; i++) {
-			statistic.addEntry(jpgMsg);
+			statistic.update(jpgMsg);
 		}
 		for(int i = 0; i < 2; i++) {
-			statistic.addEntry(badMsg);
+			statistic.update(badMsg);
 		}
 		assertEquals(62.5, statistic.getPercentage("png"), 0.0001);
 		assertEquals(37.5, statistic.getPercentage("JPEG"), 0.0001);

@@ -69,7 +69,7 @@ public class ContentReportScanner extends PluginPassiveScanner {
 		try {
 			SiteStatistic statistics = this.getStatisticsForSite(msg);
 			Alert alert = this.getAlertForSite(msg, id);
-			statistics.addEntry(msg);
+			statistics.notifyStatistics(msg);
 			alert.setEvidence(statistics.toReportString());
 		} catch (URIException e) {
 			logger.error("URIException in the ContentReportScanner", e);

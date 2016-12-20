@@ -36,7 +36,7 @@ public class ImageNumberStatisticUnitTest {
 		byte [] randomData = {1, 3, 3, 7};
 		msg.setResponseBody(randomData);
 		// When
-		statistic.addEntry(msg);
+		statistic.update(msg);
 		// Then = IOException
 	}
 	
@@ -55,7 +55,7 @@ public class ImageNumberStatisticUnitTest {
 		    list.add(rand.nextInt(100) + 1);
 		}
 		
-		list.stream().forEach(i -> statistic.addEntry(createImageMessageWith(i.intValue(), 50)));
+		list.stream().forEach(i -> statistic.update(createImageMessageWith(i.intValue(), 50)));
 		assertEquals(statistic.getAverage(), list.stream().mapToInt(a -> a).sum() / 3);
 		
 	}
@@ -75,7 +75,7 @@ public class ImageNumberStatisticUnitTest {
 		    list.add(rand.nextInt(100) + 1);
 		}
 		
-		list.stream().forEach(i -> statistic.addEntry(createImageMessageWith(i.intValue(), 50)));
+		list.stream().forEach(i -> statistic.update(createImageMessageWith(i.intValue(), 50)));
 		assertEquals(statistic.getMaximum(), list.stream().mapToInt(a -> a).max().getAsInt());
 		
 	}
@@ -95,7 +95,7 @@ public class ImageNumberStatisticUnitTest {
 		    list.add(rand.nextInt(100) + 1);
 		}
 		
-		list.stream().forEach(i -> statistic.addEntry(createImageMessageWith(i.intValue(), 50)));
+		list.stream().forEach(i -> statistic.update(createImageMessageWith(i.intValue(), 50)));
 		assertEquals(statistic.getMinimum(), list.stream().mapToInt(a -> a).min().getAsInt());
 		
 	}
@@ -115,7 +115,7 @@ public class ImageNumberStatisticUnitTest {
 		    list.add(rand.nextInt(100) + 1);
 		}
 		
-		list.stream().forEach(i -> statistic.addEntry(createImageMessageWith(i.intValue(), 50)));
+		list.stream().forEach(i -> statistic.update(createImageMessageWith(i.intValue(), 50)));
 		int[] sortedList = list.stream().mapToInt(a->a).toArray();
 		Arrays.sort(sortedList);
 		assertEquals(statistic.getMedian(), sortedList[list.size()/2]);

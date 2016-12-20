@@ -32,21 +32,21 @@ public class ImageExtensionStatisticInstancesUnitTest {
 	@Test
 	public void shouldReturnImageHeight() {
 		ImageHeightStatistic statistic = new ImageHeightStatistic();
-		statistic.addEntry(msg);
+		statistic.update(msg);
 		assertEquals(100, statistic.getMaximum());
 	}
 	
 	@Test
 	public void shouldReturnImageWidth() {
 		ImageWidthStatistic statistic = new ImageWidthStatistic();
-		statistic.addEntry(msg);
+		statistic.update(msg);
 		assertEquals(12, statistic.getMaximum());
 	}
 	
 	@Test
 	public void shouldReturnImageSize() {
 		ImageSizeStatistic statistic = new ImageSizeStatistic();
-		statistic.addEntry(msg);
+		statistic.update(msg);
 		assertEquals(msg.getResponseBody().getBytes().length, statistic.getMaximum());
 	}
 

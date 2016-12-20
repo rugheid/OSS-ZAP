@@ -28,7 +28,7 @@ public abstract class ImageNumberStatistic implements Statistic {
 
 	abstract int parseMessage(HttpMessage msg) throws IOException;
 
-	public void addEntry(HttpMessage msg) {
+	public void update(HttpMessage msg) {
 		int entry;
 		try {
 			entry = parseMessage(msg);

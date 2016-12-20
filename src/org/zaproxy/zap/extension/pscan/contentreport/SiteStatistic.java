@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SiteStatistic implements Statistic {
+public class SiteStatistic {
 
 	private ArrayList<Statistic> statistics = new ArrayList<>();
 	
@@ -18,12 +18,10 @@ public class SiteStatistic implements Statistic {
 	    statistics.add(new ImageExtensionStatistic());
 	}
 
-	@Override
-	public void addEntry(HttpMessage msg) {
-        statistics.forEach(stat -> stat.addEntry(msg));
+	public void notifyStatistics(HttpMessage msg) {
+        statistics.forEach(stat -> stat.update(msg));
 	}
 
-	@Override
 	public String toReportString() {
         List<String> reports = statistics.stream()
                                          .map(Statistic::toReportString)

@@ -4,7 +4,7 @@ import org.parosproxy.paros.network.HttpMessage;
 
 public interface Statistic {
 	
-	void addEntry(HttpMessage msg);
+	void update(HttpMessage msg);
 	
 	String toReportString();
 
