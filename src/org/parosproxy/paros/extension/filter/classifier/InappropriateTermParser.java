@@ -9,7 +9,7 @@ public interface InappropriateTermParser {
 
     InappropriateTermFileContent parseFileWithName(String fileName);
 
-    class InappropriateTermFileContent {
+    public class InappropriateTermFileContent {
         private int threshold;
         private List<Term> terms;
 
@@ -29,17 +29,17 @@ public interface InappropriateTermParser {
             terms.add(term);
         }
 
-        InappropriateTermFileContent() {
+        public InappropriateTermFileContent() {
             this(0, new ArrayList<>());
         }
 
-        InappropriateTermFileContent(int threshold, List<Term> terms) {
+        public InappropriateTermFileContent(int threshold, List<Term> terms) {
             this.threshold = threshold;
             this.terms = terms;
         }
     }
 
-    class Term {
+    public class Term {
         private final String term;
         private final int score;
         private final Set<String> reasons;
@@ -56,11 +56,11 @@ public interface InappropriateTermParser {
             return reasons;
         }
 
-        Term() {
+        public Term() {
             this("", 0, new HashSet<>());
         }
 
-        Term(String term, int score, Set<String> reasons) {
+        public Term(String term, int score, Set<String> reasons) {
             this.term = term;
             this.score = score;
             this.reasons = reasons;
