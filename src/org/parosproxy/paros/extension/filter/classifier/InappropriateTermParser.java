@@ -10,8 +10,24 @@ public interface InappropriateTermParser {
     InappropriateTermFileContent parseFileWithName(String fileName);
 
     class InappropriateTermFileContent {
-        public int threshold;
-        public List<Term> terms;
+        private int threshold;
+        private List<Term> terms;
+
+        public int getThreshold() {
+            return threshold;
+        }
+
+        public void setThreshold(int threshold) {
+            this.threshold = threshold;
+        }
+
+        public List<Term> getTerms() {
+            return terms;
+        }
+
+        public void addTerm(Term term) {
+            terms.add(term);
+        }
 
         InappropriateTermFileContent() {
             this(0, new ArrayList<>());

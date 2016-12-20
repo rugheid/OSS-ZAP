@@ -53,13 +53,13 @@ public class CSVParser implements InappropriateTermParser {
         if (parts.length != 2) return;
         if (!parts[0].equals("threshold")) return;
 
-        fileContent.threshold = Integer.parseInt(parts[1]);
+        fileContent.setThreshold(Integer.parseInt(parts[1]));
     }
 
     private void parseTermLineFromParts(String[] parts) {
         String term = parts[0];
         int score = Integer.parseInt(parts[1]);
         Set<String> reasons = new HashSet<>(Arrays.asList(parts[2].split(",")));
-        fileContent.terms.add(new Term(term, score, reasons));
+        fileContent.addTerm(new Term(term, score, reasons));
     }
 }

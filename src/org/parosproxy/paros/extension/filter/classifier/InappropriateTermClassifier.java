@@ -19,14 +19,14 @@ public class InappropriateTermClassifier implements ContentClassifier {
         Classification classification = new Classification();
         if (fileContent == null) return classification;
         int score = 0;
-        for (Term term: fileContent.terms) {
+        for (Term term: fileContent.getTerms()) {
             int occurrences = StringUtils.countMatches(message.getResponseBody().toString(), term.getTerm());
             if (occurrences > 0) {
                 classification.addReasons(term.getReasons());
                 score += term.getScore();
             }
         }
-        classification.setClassifiedInappropriate(score > fileContent.threshold);
+        classification.setClassifiedInappropriate(score > fileContent.getThreshold());
         return classification;
     }
 

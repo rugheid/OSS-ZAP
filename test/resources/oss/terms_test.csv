@@ -1,0 +1,7 @@
+# FORMAT: threshold #VALUE#
+
+threshold 10
+
+# FORMAT: #inappropriate string#;#weight#;#TAGS SEPARATED BY COMMA#
+nigger;10;racist
+deport mexicans;-1000;racist,fearmongering
