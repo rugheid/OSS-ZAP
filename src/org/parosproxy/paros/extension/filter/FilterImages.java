@@ -18,13 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-// ZAP: 2011/04/16 i18n
-// ZAP: 2012/03/15 Changed to use StringBuilder and replaced some string concatenations
-// with calls to the method append of the class StringBuilder. Reworked some code.
-// ZAP: 2012/04/25 Added @Override annotation to all appropriate methods.
-// ZAP: 2012/07/29 Removed incorrect (and unused) init method
-// ZAP: 2013/01/25 Removed the "(non-Javadoc)" comments.
-// ZAP: 2013/03/03 Issue 546: Remove all template Javadoc comments
 
 package org.parosproxy.paros.extension.filter;
 
