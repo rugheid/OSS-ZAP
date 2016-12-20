@@ -17,7 +17,7 @@ public class ImageExtensionStatistic implements Statistic {
 	private int totalImages = 0;
 	
 	public void addEntry(HttpMessage msg) {
-		String extension;
+		String extension = "";
 		try {
 			extension = extensionOfImageFromBytes(msg.getResponseBody().getBytes());
 		} catch (IOException e) {
@@ -40,6 +40,8 @@ public class ImageExtensionStatistic implements Statistic {
 		if (readers.hasNext()) {
 		    ImageReader read = readers.next();
 		    extension = read.getFormatName();
+		} else {
+			throw new IOException("No extension detected.");
 		}
 		return extension;
     }
@@ -54,7 +56,10 @@ public class ImageExtensionStatistic implements Statistic {
 		return sb.toString();
 	}
 	
-	private double getPercentage(String extension) {
+	protected double getPercentage(String extension) {
+		if (!this.nbExtensions.containsKey(extension)) {
+			return 0.0;
+		}
 		int occurences = this.nbExtensions.get(extension);
 		return (double) occurences / (double) this.totalImages * 100;
 	}

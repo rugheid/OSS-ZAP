@@ -5,11 +5,13 @@ import org.apache.log4j.Logger;
 import org.parosproxy.paros.network.HttpMessage;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class ImageNumberStatistic implements Statistic {
 	
@@ -65,7 +67,9 @@ public abstract class ImageNumberStatistic implements Statistic {
 		if (!(data.size() > 0)) {
 			return 0;
 		}
-		return data.get(data.size()/2);
+		int[] sortedData = data.stream().mapToInt(a->a).toArray();
+		Arrays.sort(sortedData);
+		return sortedData[data.size()/2];
 	}
 	
 	public int getAverage() {
