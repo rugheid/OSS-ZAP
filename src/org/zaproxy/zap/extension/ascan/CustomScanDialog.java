@@ -75,9 +75,8 @@ import org.zaproxy.zap.model.StructuralSiteNode;
 import org.zaproxy.zap.model.Target;
 import org.zaproxy.zap.users.User;
 import org.zaproxy.zap.utils.ZapTextArea;
-import org.zaproxy.zap.view.LayoutHelper;
-import org.zaproxy.zap.view.StandardFieldsDialog;
-import org.zaproxy.zap.view.TechnologyTreePanel;
+import org.zaproxy.zap.utils.ZapTextField;
+import org.zaproxy.zap.view.*;
 
 public class CustomScanDialog extends StandardFieldsDialog {
 	
@@ -181,26 +180,29 @@ public class CustomScanDialog extends StandardFieldsDialog {
         }
 
         this.addTargetSelectField(0, FIELD_START, this.target, false, false);
-        this.addComboField(0, FIELD_POLICY, extension.getPolicyManager().getAllPolicyNames(), scanPolicy.getName());
-        this.addComboField(0, FIELD_CONTEXT, new String[]{}, "");
-        this.addComboField(0, FIELD_USER, new String[]{}, "");
-        this.addCheckBoxField(0, FIELD_RECURSE, true);
+        this.addFieldInTab(FIELD_POLICY,
+                StandardFieldsFactory.get().createComboField(
+                        extension.getPolicyManager().getAllPolicyNames(),
+                        scanPolicy.getName()),
+                0);
+        this.addFieldInTab(FIELD_CONTEXT,
+                StandardFieldsFactory.get().createComboField(new ArrayList<>(), ""),
+                0);
+        this.addFieldInTab(FIELD_USER,
+                StandardFieldsFactory.get().createComboField(new ArrayList<>(), ""),
+                0);
+        this.addFieldInTab(FIELD_RECURSE, StandardFieldsFactory.get().createCheckBoxField(true), 0);
         // This option is always read from the 'global' options
-        this.addCheckBoxField(0, FIELD_ADVANCED, extension.getScannerParam().isShowAdvancedDialog());
+        this.addFieldInTab(FIELD_ADVANCED, StandardFieldsFactory.get().createCheckBoxField(true), 0);
 
-        this.addFieldListener(FIELD_POLICY, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                policySelected();
-            }
-        });
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_POLICY), e -> policySelected());
 
         this.addPadding(0);
 
         // Default to Recurse, so always set the warning
         customPanelStatus.setText(Constant.messages.getString("ascan.custom.status.recurse"));
 
-        this.addFieldListener(FIELD_CONTEXT, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_CONTEXT), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setUsers();
@@ -208,19 +210,19 @@ public class CustomScanDialog extends StandardFieldsDialog {
             }
         });
         
-        this.addFieldListener(FIELD_RECURSE, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_RECURSE), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setFieldStates();
             }
         });
         
-        this.addFieldListener(FIELD_ADVANCED, new ActionListener() {
+        StandardFieldsUtils.addFieldListener(this.getField(FIELD_ADVANCED), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Save the adv option permanently for next time
 
-                setAdvancedOptions(getBoolValue(FIELD_ADVANCED));
+                setAdvancedOptions(((JCheckBox)getField(FIELD_ADVANCED)).isSelected());
             }
         });
 
@@ -266,7 +268,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     }
 
     private void policySelected() {
-        String policyName = getStringValue(FIELD_POLICY);
+        String policyName = ((ZapTextField)this.getField(FIELD_POLICY)).getText();
         try {
             scanPolicy = extension.getPolicyManager().getPolicy(policyName);
             policyPanel.setScanPolicy(scanPolicy);
@@ -362,13 +364,13 @@ public class CustomScanDialog extends StandardFieldsDialog {
             this.setTech();
         }
         
-        this.setComboFields(FIELD_CONTEXT, ctxNames, "");
+        StandardFieldsUtils.setComboFields((JComboBox<String>)this.getField(FIELD_CONTEXT), ctxNames, "");
         this.getField(FIELD_CONTEXT).setEnabled(ctxNames.size() > 0);
     }
 
     private Context getSelectedContext() {
-        String ctxName = this.getStringValue(FIELD_CONTEXT);
-        if (this.extUserMgmt != null && !this.isEmptyField(FIELD_CONTEXT)) {
+        String ctxName = ((ZapTextField)this.getField(FIELD_CONTEXT)).getText();
+        if (this.extUserMgmt != null && !StandardFieldsUtils.isEmptyField(getField(FIELD_CONTEXT))) {
             Session session = Model.getSingleton().getSession();
             return session.getContext(ctxName);
         }
@@ -378,7 +380,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     private User getSelectedUser() {
         Context context = this.getSelectedContext();
         if (context != null) {
-            String userName = this.getStringValue(FIELD_USER);
+            String userName = ((ZapTextField)this.getField(FIELD_USER)).getText();
             List<User> users = this.extUserMgmt.getContextUserAuthManager(context.getIndex()).getUsers();
             for (User user : users) {
                 if (userName.equals(user.getName())) {
@@ -399,7 +401,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
                 userNames.add(user.getName());
             }
         }
-        this.setComboFields(FIELD_USER, userNames, "");
+        StandardFieldsUtils.setComboFields((JComboBox<String>)this.getField(FIELD_USER), userNames, "");
         this.getField(FIELD_USER).setEnabled(userNames.size() > 1);	// Theres always 1..
     }
 
@@ -559,11 +561,11 @@ public class CustomScanDialog extends StandardFieldsDialog {
                     getVariantPanel().setAllInjectableAndRPC(!disableNonCustomVectors.isSelected());
 
                     if (disableNonCustomVectors.isSelected()) {
-                        setFieldValue(FIELD_DISABLE_VARIANTS_MSG,
+                        StandardFieldsUtils.setFieldValue(getField(FIELD_DISABLE_VARIANTS_MSG),
                                 Constant.messages.getString("ascan.custom.warn.disabled"));
                     
                     } else {
-                        setFieldValue(FIELD_DISABLE_VARIANTS_MSG, "");
+                        StandardFieldsUtils.setFieldValue(getField(FIELD_DISABLE_VARIANTS_MSG), "");
                     }
 
                 }
@@ -599,7 +601,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     private void setFieldStates() {
         int userDefStart = getRequestField().getSelectionStart();
 
-        if (getBoolValue(FIELD_RECURSE)) {
+        if (((JCheckBox)this.getField(FIELD_RECURSE)).isSelected()) {
             // Dont support custom vectors when recursing
             customPanelStatus.setText(Constant.messages.getString("ascan.custom.status.recurse"));
             getAddCustomButton().setEnabled(false);
@@ -727,7 +729,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
     public void save() {
         List<Object> contextSpecificObjects = new ArrayList<Object>();
 
-        if (!this.getBoolValue(FIELD_ADVANCED)) {
+        if (!((JCheckBox)this.getField(FIELD_ADVANCED)).isSelected()) {
             contextSpecificObjects.add(scanPolicy);
         } else {
             contextSpecificObjects.add(policyPanel.getScanPolicy());
@@ -752,7 +754,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
                 scannerParam.setTargetParamsEnabledRPC(0);                
             }
             
-            if (!getBoolValue(FIELD_RECURSE) && injectionPointModel.getSize() > 0) {
+            if (!((JCheckBox)this.getField(FIELD_RECURSE)).isSelected() && injectionPointModel.getSize() > 0) {
                 int[][] injPoints = new int[injectionPointModel.getSize()][];
                 for (int i = 0; i < injectionPointModel.getSize(); i++) {
                     Highlight hl = injectionPointModel.elementAt(i);
@@ -796,7 +798,7 @@ public class CustomScanDialog extends StandardFieldsDialog {
             }
         }
 
-        target.setRecurse(this.getBoolValue(FIELD_RECURSE));
+        target.setRecurse(((JCheckBox)this.getField(FIELD_RECURSE)).isSelected());
 
         if (target.getContext() == null && getSelectedContext() != null) {
             target.setContext(getSelectedContext());

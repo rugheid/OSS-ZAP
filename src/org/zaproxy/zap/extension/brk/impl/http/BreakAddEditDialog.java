@@ -28,7 +28,12 @@ import java.util.regex.Pattern;
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Location;
 import org.zaproxy.zap.extension.brk.impl.http.HttpBreakpointMessage.Match;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
+
+import javax.swing.*;
 
 public class BreakAddEditDialog extends StandardFieldsDialog {
 
@@ -63,11 +68,19 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 			this.setTitle(Constant.messages.getString("brk.brkpoint.edit.title"));
 		}
 
-		this.addComboField(FIELD_LOCATION, getLocations(), this.locToStr(breakpoint.getLocation()));
-		this.addComboField(FIELD_MATCH, getMatches(), this.matchToStr(breakpoint.getMatch()));
-		this.addTextField(FIELD_STRING, breakpoint.getString());
-		this.addCheckBoxField(FIELD_INVERSE, breakpoint.isInverse());
-		this.addCheckBoxField(FIELD_IGNORECASE, breakpoint.isIgnoreCase());
+		this.addField(FIELD_LOCATION,
+				StandardFieldsFactory.get().createComboField(
+						getLocations(),
+						this.locToStr(breakpoint.getLocation())
+				));
+		this.addField(FIELD_MATCH,
+				StandardFieldsFactory.get().createComboField(
+						getMatches(),
+						this.matchToStr(breakpoint.getMatch())
+				));
+		this.addField(FIELD_STRING, StandardFieldsFactory.get().createTextField(breakpoint.getString()));
+		this.addField(FIELD_INVERSE, StandardFieldsFactory.get().createCheckBoxField(breakpoint.isInverse()));
+		this.addField(FIELD_INVERSE, StandardFieldsFactory.get().createCheckBoxField(breakpoint.isIgnoreCase()));
 
 		this.addPadding();
 	}
@@ -117,11 +130,11 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 	public void save() {
 		HttpBreakpointMessage brk = 
 				new HttpBreakpointMessage(
-						this.getStringValue(FIELD_STRING), 
-						this.strToLoc(this.getStringValue(FIELD_LOCATION)), 
-						this.strToMatch(this.getStringValue(FIELD_MATCH)), 
-						this.getBoolValue(FIELD_INVERSE),
-						this.getBoolValue(FIELD_IGNORECASE));
+						((ZapTextField)this.getField(FIELD_STRING)).getText(),
+						this.strToLoc(((ZapTextField)this.getField(FIELD_LOCATION)).getText()),
+						this.strToMatch(((ZapTextField)this.getField(FIELD_MATCH)).getText()),
+						((JCheckBox)getField(FIELD_INVERSE)).isSelected(),
+						((JCheckBox)getField(FIELD_IGNORECASE)).isSelected());
 		
 		if (add) {
 		    breakPointsManager.addBreakpoint(brk);
@@ -135,12 +148,12 @@ public class BreakAddEditDialog extends StandardFieldsDialog {
 
 	@Override
 	public String validateFields() {
-		if (this.isEmptyField(FIELD_STRING)) {
+		if (StandardFieldsUtils.isEmptyField(getField(FIELD_STRING))) {
 			return Constant.messages.getString("brk.brkpoint.error.nostr"); 
 		}
-		if (Match.regex.equals(this.strToMatch(this.getStringValue(FIELD_MATCH)))) {
+		if (Match.regex.equals(this.strToMatch(((ZapTextField)this.getField(FIELD_MATCH)).getText()))) {
 			try {
-				Pattern.compile(this.getStringValue(FIELD_STRING));
+				Pattern.compile(((ZapTextField)this.getField(FIELD_STRING)).getText());
 			} catch (Exception e) {
 				return Constant.messages.getString("brk.brkpoint.error.regex"); 
 			}

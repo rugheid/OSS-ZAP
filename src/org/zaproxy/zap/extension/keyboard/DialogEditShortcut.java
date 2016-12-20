@@ -28,10 +28,13 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import org.parosproxy.paros.Constant;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
 
 public class DialogEditShortcut extends StandardFieldsDialog {
 
@@ -74,14 +77,20 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 			}};
 		
 		this.addReadOnlyField(FIELD_ACTION, shortcut.getName(), false);
-		this.addComboField(FIELD_KEY, getKeyList(), getKey(shortcut.getKeyStroke()));
-		this.addFieldListener(FIELD_KEY, listener);
-		this.addCheckBoxField(FIELD_CONTROL, this.isModifier(shortcut.getKeyStroke(), InputEvent.CTRL_DOWN_MASK));
-		this.addFieldListener(FIELD_CONTROL, listener);
-		this.addCheckBoxField(FIELD_ALT, this.isModifier(shortcut.getKeyStroke(), InputEvent.ALT_DOWN_MASK));
-		this.addFieldListener(FIELD_ALT, listener);
-		this.addCheckBoxField(FIELD_SHIFT, this.isModifier(shortcut.getKeyStroke(), InputEvent.SHIFT_DOWN_MASK));
-		this.addFieldListener(FIELD_SHIFT, listener);
+		this.addField(FIELD_KEY, StandardFieldsFactory.get().createComboField(getKeyList(), getKey(shortcut.getKeyStroke())));
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_KEY), listener);
+		this.addField(FIELD_CONTROL, StandardFieldsFactory.get().createCheckBoxField(
+				this.isModifier(shortcut.getKeyStroke(), InputEvent.CTRL_DOWN_MASK)
+		));
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_CONTROL), listener);
+		this.addField(FIELD_ALT, StandardFieldsFactory.get().createCheckBoxField(
+				this.isModifier(shortcut.getKeyStroke(), InputEvent.ALT_DOWN_MASK)
+		));
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_ALT), listener);
+		this.addField(FIELD_SHIFT, StandardFieldsFactory.get().createCheckBoxField(
+				this.isModifier(shortcut.getKeyStroke(), InputEvent.SHIFT_DOWN_MASK)
+		));
+		StandardFieldsUtils.addFieldListener(this.getField(FIELD_SHIFT), listener);
 		this.addReadOnlyField(FIELD_INFO, "", true);
 		
 		this.getField(FIELD_INFO).setForeground(Color.RED);
@@ -99,10 +108,10 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 	private void checkDuplicate() {
 		KeyboardShortcut ks = this.getDuplicate();
 		if (ks != null) {
-			this.setFieldValue(FIELD_INFO, 
+			StandardFieldsUtils.setFieldValue(getField(FIELD_INFO),
 					MessageFormat.format(Constant.messages.getString("keyboard.dialog.warning.dup"), ks.getName()));
 		} else {
-			this.setFieldValue(FIELD_INFO, "");
+			StandardFieldsUtils.setFieldValue(getField(FIELD_INFO), "");
 		}
 	}
 	
@@ -165,7 +174,7 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 	}
 	
 	private char selectedKey() {
-		return KeyboardMapping.keyCode(this.getStringValue(FIELD_KEY));
+		return KeyboardMapping.keyCode(((ZapTextField)this.getField(FIELD_KEY)).getText());
 	}
 	
 	private boolean isModifier(KeyStroke ks, int modifier) {
@@ -181,13 +190,13 @@ public class DialogEditShortcut extends StandardFieldsDialog {
 		int modifiers = 0;
 		
 		if (keyCode != 0) {
-			if (this.getBoolValue(FIELD_CONTROL)) {
+			if (((JCheckBox)getField(FIELD_CONTROL)).isSelected()) {
 				modifiers |= InputEvent.CTRL_DOWN_MASK;
 			}
-			if (this.getBoolValue(FIELD_ALT)) {
+			if (((JCheckBox)getField(FIELD_ALT)).isSelected()) {
 				modifiers |= InputEvent.ALT_DOWN_MASK;
 			}
-			if (this.getBoolValue(FIELD_SHIFT)) {
+			if (((JCheckBox)getField(FIELD_SHIFT)).isSelected()) {
 				modifiers |= InputEvent.SHIFT_DOWN_MASK;
 			}
 			ks = KeyStroke.getKeyStroke(keyCode, modifiers, false);

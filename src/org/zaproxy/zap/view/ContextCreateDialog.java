@@ -28,6 +28,9 @@ import org.parosproxy.paros.model.SiteNode;
 import org.zaproxy.zap.model.Context;
 import org.zaproxy.zap.model.StructuralSiteNode;
 import org.zaproxy.zap.utils.DisplayUtils;
+import org.zaproxy.zap.utils.ZapTextField;
+
+import javax.swing.*;
 
 public class ContextCreateDialog extends StandardFieldsDialog {
 
@@ -42,26 +45,28 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 
 	public ContextCreateDialog(Frame owner) {
 		super(owner, "context.create.title", DisplayUtils.getScaledDimension(400,300));
-		this.addTextField(NAME_FIELD, null);
-		this.addNodeSelectField(TOP_NODE, null, false, false);
-		this.addMultilineField(DESC_FIELD, "");
-		this.addCheckBoxField(IN_SCOPE_FIELD, true);
+		this.addField(NAME_FIELD, StandardFieldsFactory.get().createTextField(null));
+		this.addNodeSelectField(TOP_NODE, StandardFieldsFactory.get().createNodeSelectField(null, false));
+		this.addField(DESC_FIELD, StandardFieldsFactory.get().createMultilineField(""));
+		this.addField(IN_SCOPE_FIELD, StandardFieldsFactory.get().createCheckBoxField(true));
 	}
 	
 	@Override
 	public void siteNodeSelected(String field, SiteNode node) {
 		topNode = node;
-		if (node != null && this.isEmptyField(NAME_FIELD)) {
+		if (node != null && StandardFieldsUtils.isEmptyField(getField(NAME_FIELD))) {
 			// They havnt chosen a context name yet, default to the name of the node they chose
-			this.setFieldValue(NAME_FIELD, node.getNodeName());
+			StandardFieldsUtils.setFieldValue(getField(NAME_FIELD), node.getNodeName());
 		}
 	}
 
 	@Override
 	public void save() {
-		Context ctx = Model.getSingleton().getSession().getNewContext(this.getStringValue(NAME_FIELD));
-		ctx.setDescription(this.getStringValue(DESC_FIELD));
-		ctx.setInScope(this.getBoolValue(IN_SCOPE_FIELD));
+	    String nameValue = ((ZapTextField)this.getField(NAME_FIELD)).getText();
+		Context ctx = Model.getSingleton().getSession().getNewContext(nameValue);
+        String descValue = ((ZapTextField)this.getField(DESC_FIELD)).getText();
+		ctx.setDescription(descValue);
+		ctx.setInScope(((JCheckBox)this.getField(IN_SCOPE_FIELD)).isSelected());
 		if (topNode != null) {
 	        try {
 				ctx.addIncludeInContextRegex(new StructuralSiteNode(topNode).getRegexPattern());
@@ -75,7 +80,7 @@ public class ContextCreateDialog extends StandardFieldsDialog {
 
 	@Override
 	public String validateFields() {
-		if (this.isEmptyField(NAME_FIELD)) {
+		if (StandardFieldsUtils.isEmptyField(getField(NAME_FIELD))) {
 			return Constant.messages.getString("context.create.warning.noname");
 		}
 		return null;

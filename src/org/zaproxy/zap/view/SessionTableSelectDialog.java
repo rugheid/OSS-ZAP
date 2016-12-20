@@ -23,6 +23,7 @@ import java.awt.Frame;
 import java.util.List;
 
 import org.zaproxy.zap.utils.DisplayUtils;
+import org.zaproxy.zap.utils.ZapTextField;
 
 public class SessionTableSelectDialog extends StandardFieldsDialog {
 
@@ -36,12 +37,12 @@ public class SessionTableSelectDialog extends StandardFieldsDialog {
 		super(owner, "session.select.title", DisplayUtils.getScaledDimension(400,200));
 		//this.setModal(true);
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
-		this.addComboField(NAME_FIELD, sessions, null);
+		this.addField(NAME_FIELD, StandardFieldsFactory.get().createComboField(sessions, null));
 	}
 
 	@Override
 	public void save() {
-		this.selectedSession = this.getStringValue(NAME_FIELD);
+		this.selectedSession = ((ZapTextField)this.getField(NAME_FIELD)).getText();
 	}
 
 	public String getSelectedSession() {

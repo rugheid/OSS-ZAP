@@ -26,13 +26,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.MessageFormat;
 
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.view.View;
 import org.zaproxy.zap.model.Context;
+import org.zaproxy.zap.utils.ZapTextField;
+import org.zaproxy.zap.view.widgets.ContextSelectComboBox;
 
 public class ContextExportDialog extends StandardFieldsDialog {
 
@@ -47,33 +49,33 @@ public class ContextExportDialog extends StandardFieldsDialog {
 
 	public ContextExportDialog(Frame owner) {
 		super(owner, "context.import.title", new Dimension(400,250));
-		this.addContextSelectField(CONTEXT_FIELD, null);
+		this.addField(CONTEXT_FIELD, StandardFieldsFactory.get().createContextSelectField(null));
 		this.addFileSelectField(DIR_FIELD, Constant.getContextsDir(), JFileChooser.DIRECTORIES_ONLY, null);
-		this.addTextField(FILE_FIELD, null);
-		this.addCheckBoxField(OVERWRITE_FIELD, false);
+		this.addField(FILE_FIELD, StandardFieldsFactory.get().createTextField(null));
+		this.addField(OVERWRITE_FIELD, StandardFieldsFactory.get().createCheckBoxField(false));
 		
-		super.addFieldListener(CONTEXT_FIELD, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Context ctx = getContextValue(CONTEXT_FIELD);
-				if (ctx != null) {
-					String fileName = ctx.getName() + CONTEXT_EXT;
-					setFieldValue(FILE_FIELD, fileName);
-				}
-			}});
+		StandardFieldsUtils.addFieldListener(this.getField(CONTEXT_FIELD), e -> {
+            Context ctx = ((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext();
+            if (ctx != null) {
+                String fileName = ctx.getName() + CONTEXT_EXT;
+                StandardFieldsUtils.setFieldValue(getField(FILE_FIELD), fileName);
+            }
+        });
 	}
 	
 	private File getSelectedFile() {
-		if (this.isEmptyField(DIR_FIELD) || this.isEmptyField(FILE_FIELD)) {
+		if (StandardFieldsUtils.isEmptyField(getField(DIR_FIELD)) || StandardFieldsUtils.isEmptyField(getField(FILE_FIELD))) {
 			return null;
 		}
-		return new File (this.getStringValue(DIR_FIELD), this.getStringValue(FILE_FIELD));
+		String dirValue = ((ZapTextField)this.getField(DIR_FIELD)).getText();
+		String fileValue = ((ZapTextField)this.getField(FILE_FIELD)).getText();
+		return new File (dirValue, fileValue);
 	}
 
 	@Override
 	public void save() {
 		try {
-			Model.getSingleton().getSession().exportContext(getContextValue(CONTEXT_FIELD), getSelectedFile());
+			Model.getSingleton().getSession().exportContext(((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext(), getSelectedFile());
 		} catch (ConfigurationException e) {
 			View.getSingleton().showWarningDialog(this, 
 					MessageFormat.format(Constant.messages.getString("context.import.error"), e.getMessage()));
@@ -83,12 +85,12 @@ public class ContextExportDialog extends StandardFieldsDialog {
 	@Override
 	public String validateFields() {
 		File f = this.getSelectedFile();
-		if (this.getContextValue(CONTEXT_FIELD) == null) {
+		if (((ContextSelectComboBox)getField(CONTEXT_FIELD)).getSelectedContext() == null) {
 			return Constant.messages.getString("context.import.error.nocontext");
 		}
 		if (f == null) {
 			return Constant.messages.getString("context.import.error.nofile");
-		} else if (f.exists() & ! this.getBoolValue(OVERWRITE_FIELD)) {
+		} else if (f.exists() & ! ((JCheckBox)getField(OVERWRITE_FIELD)).isSelected()) {
 			return Constant.messages.getString("context.import.error.exists");
 		} else if (! f.getParentFile().canWrite()) {
 			return Constant.messages.getString("context.import.error.noaccess");

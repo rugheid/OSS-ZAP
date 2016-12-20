@@ -24,11 +24,14 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 import org.parosproxy.paros.Constant;
 import org.zaproxy.zap.utils.ZapTextArea;
+import org.zaproxy.zap.utils.ZapTextField;
 import org.zaproxy.zap.view.StandardFieldsDialog;
+import org.zaproxy.zap.view.StandardFieldsFactory;
+import org.zaproxy.zap.view.StandardFieldsUtils;
 
 public class DialogEditRuleConfig extends StandardFieldsDialog {
 
@@ -55,12 +58,12 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
         
         this.addReadOnlyField(FIELD_KEY, rc.getKey(), false);
         this.addReadOnlyField(FIELD_DEFAULT, rc.getDefaultValue(), false);
-        this.addTextField(FIELD_VALUE, rc.getValue());
+        this.addField(FIELD_VALUE, StandardFieldsFactory.get().createTextField(rc.getValue()));
         String desc = "";
         if (Constant.messages.containsKey(rc.getKey())) {
             desc = Constant.messages.getString(rc.getKey());
         }
-        this.addMultilineField(FIELD_DESC, desc);
+        this.addField(FIELD_DESC, StandardFieldsFactory.get().createMultilineField(desc));
         ZapTextArea descField = (ZapTextArea)this.getField(FIELD_DESC);
         descField.setEditable(false);
         descField.setWrapStyleWord(true);
@@ -74,7 +77,7 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
 
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    setFieldValue(FIELD_VALUE, rc.getDefaultValue());
+                    StandardFieldsUtils.setFieldValue(getField(FIELD_VALUE), rc.getDefaultValue());
                 }});
         }
         return resetButton;
@@ -87,8 +90,8 @@ public class DialogEditRuleConfig extends StandardFieldsDialog {
 
     @Override
     public void save() {
-        if (! this.getStringValue(FIELD_VALUE).equals(this.rc.getValue())) {
-            this.model.setRuleConfigValue (rc.getKey(), this.getStringValue(FIELD_VALUE));
+        if (! ((ZapTextField)this.getField(FIELD_VALUE)).getText().equals(this.rc.getValue())) {
+            this.model.setRuleConfigValue (rc.getKey(), ((ZapTextField)this.getField(FIELD_VALUE)).getText());
         }
     }
 

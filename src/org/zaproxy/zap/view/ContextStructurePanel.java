@@ -27,6 +27,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -62,7 +63,6 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 	/**
 	 * Returns the name of the panel "Structure" for the given {@code contextIndex}.
 	 * 
-	 * @param contextIndex the context index that will be used to create the name of the panel
 	 * @return the name of the panel "Include in context" for the given {@code contextIndex}
 	 * @since 2.2.0
 	 * @see Context#getIndex()
@@ -370,20 +370,22 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 				ro = true;
 				this.addReadOnlyField(FIELD_NAME, getModVal(type), false);
 			} else {
-				this.addComboField(FIELD_TYPE, 
-						new String [] {
-							Constant.messages.getString(VALUE_TYPE_STRUCT), 
-							Constant.messages.getString(VALUE_TYPE_DATA)}, 
-							getModVal(type)); 
-				this.addFieldListener(FIELD_TYPE, new ActionListener() {
+				this.addField(FIELD_TYPE,
+						StandardFieldsFactory.get().createComboField(
+							Arrays.asList(
+								Constant.messages.getString(VALUE_TYPE_STRUCT),
+								Constant.messages.getString(VALUE_TYPE_DATA)),
+							getModVal(type)
+						));
+				StandardFieldsUtils.addFieldListener(this.getField(FIELD_TYPE), new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						setFieldStates();						
 					}});
 			}
-			
-			this.addTextField(FIELD_NAME, name);
-			this.addTextField(FIELD_REGEX, regex);
+
+			this.addField(FIELD_NAME, StandardFieldsFactory.get().createTextField(name));
+			this.addField(FIELD_REGEX, StandardFieldsFactory.get().createTextField(regex));
 
 			setFieldStates();
 
@@ -395,7 +397,7 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 		private void setFieldStates() {
 			if (! ro) {
 				if (Constant.messages.getString(VALUE_TYPE_STRUCT).equals(
-						this.getStringValue(FIELD_TYPE))) {
+                        ((ZapTextField)this.getField(FIELD_TYPE)).getText())) {
 					type = StructuralNodeModifier.Type.StructuralParameter;
 				} else {
 					type = StructuralNodeModifier.Type.DataDrivenNode;
@@ -417,27 +419,27 @@ public class ContextStructurePanel extends AbstractContextPropertiesPanel {
 		public void save() {
 			ddn = new StructuralNodeModifier(
 					type,
-					Pattern.compile(this.getStringValue(FIELD_REGEX)), 
-					this.getStringValue(FIELD_NAME));
+					Pattern.compile(((ZapTextField)this.getField(FIELD_REGEX)).getText()),
+					((ZapTextField)this.getField(FIELD_NAME)).getText());
 		}
 
 		@Override
 		public String validateFields() {
-			if (! this.getStringValue(FIELD_NAME).matches("[A-Za-z0-9]+")) {
+			if (! ((ZapTextField)this.getField(FIELD_NAME)).getText().matches("[A-Za-z0-9]+")) {
 				// Must supply a name just made up of alphanumeric characters
 				return Constant.messages.getString("context.ddn.dialog.error.name");
 			}
 			
 			if (StructuralNodeModifier.Type.DataDrivenNode.equals(type)) {
-				if (this.isEmptyField(FIELD_REGEX)) {
+				if (StandardFieldsUtils.isEmptyField(getField(FIELD_REGEX))) {
 					return Constant.messages.getString("context.ddn.dialog.error.regex");
 				}
-				if (! this.getStringValue(FIELD_REGEX).matches(".*\\(.*\\).*\\(.*\\).*")) {
+				if (! ((ZapTextField)this.getField(FIELD_REGEX)).getText().matches(".*\\(.*\\).*\\(.*\\).*")) {
 					// We need at least 2 groups
 					return Constant.messages.getString("context.ddn.dialog.error.regex");
 				}
 				try {
-					Pattern.compile(this.getStringValue(FIELD_REGEX));
+					Pattern.compile(((ZapTextField)this.getField(FIELD_REGEX)).getText());
 				} catch (Exception e) {
 					// Not a valid regex expression
 					return Constant.messages.getString("context.ddn.dialog.error.regex");
