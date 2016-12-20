@@ -20,13 +20,13 @@ public class InappropriateTermClassifier implements ContentClassifier {
         if (fileContent == null) return classification;
         int score = 0;
         for (Term term: fileContent.terms) {
-            int occurrences = StringUtils.countMatches(message.getResponseBody().toString(), term.term);
+            int occurrences = StringUtils.countMatches(message.getResponseBody().toString(), term.getTerm());
             if (occurrences > 0) {
-                classification.reasons.addAll(term.reasons);
-                score += term.score;
+                classification.addReasons(term.getReasons());
+                score += term.getScore();
             }
         }
-        classification.classifiedInappropriate = score > fileContent.threshold;
+        classification.setClassifiedInappropriate(score > fileContent.threshold);
         return classification;
     }
 

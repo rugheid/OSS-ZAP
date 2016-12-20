@@ -1,6 +1,5 @@
 package org.parosproxy.paros.extension.filter.classifier;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,9 +24,21 @@ public interface InappropriateTermParser {
     }
 
     class Term {
-        public final String term;
-        public final int score;
-        public final Set<String> reasons;
+        private final String term;
+        private final int score;
+        private final Set<String> reasons;
+
+        public String getTerm() {
+            return term;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public Set<String> getReasons() {
+            return reasons;
+        }
 
         Term() {
             this("", 0, new HashSet<>());

@@ -2,6 +2,7 @@ package org.parosproxy.paros.extension.filter.classifier;
 
 import org.parosproxy.paros.network.HttpMessage;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +13,24 @@ public interface ContentClassifier {
     Classification classify(HttpMessage message);
 
     class Classification {
-        public boolean classifiedInappropriate;
-        public Set<String> reasons;
+        private boolean classifiedInappropriate;
+        private Set<String> reasons;
+
+        public boolean isClassifiedInappropriate() {
+            return classifiedInappropriate;
+        }
+
+        public void setClassifiedInappropriate(boolean classifiedInappropriate) {
+            this.classifiedInappropriate = classifiedInappropriate;
+        }
+
+        public Set<String> getReasons() {
+            return reasons;
+        }
+
+        public void addReasons(Collection<? extends String> collection) {
+            reasons.addAll(collection);
+        }
 
         Classification() {
             this(false, new HashSet<>());

@@ -33,7 +33,7 @@ public class FilterInappropriateContent extends FilterAdaptor {
 
         Classification classification = classifier.classify(httpMessage);
 
-        if (classification.classifiedInappropriate) {
+        if (classification.isClassifiedInappropriate()) {
             String blockedPageHTML = null;
             try {
                 blockedPageHTML = IOUtils.toString(getClass().getResourceAsStream("/resource/oss/blocked.html"));
@@ -41,7 +41,7 @@ public class FilterInappropriateContent extends FilterAdaptor {
                 System.out.println("Loading blocked HTML page failed! Using simple string instead.");
                 blockedPageHTML = "<h1>Blocked</h1>";
             }
-            blockedPageHTML = blockedPageHTML.replace("<reasons>", StringUtils.join(classification.reasons, ", "));
+            blockedPageHTML = blockedPageHTML.replace("<reasons>", StringUtils.join(classification.getReasons(), ", "));
             httpMessage.setResponseBody(blockedPageHTML);
         }
     }
